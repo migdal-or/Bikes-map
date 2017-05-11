@@ -8,17 +8,16 @@
 
 #import "BMPStationsMapView.h"
 #import <MapKit/MapKit.h>
-#import <CoreLocation/CoreLocation.h>
+//#import <CoreLocation/CoreLocation.h>
 #import "BMPAnnotation.h"
 
 // static const
-
 static CGFloat const TABBAR_HEIGHT = 100;
 static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
-#define LOCAL_MODE YES // just to skip all this iTunes bullshit and load data from local file )
+#define LOCAL_MODE NO // just to skip all this iTunes bullshit and load data from local file )
 #define STORE_FILE YES // save itunes data if non-local mode call?
-#define ARCHIVE_FILE_PATH @"/Users/user/Desktop/repo/Bikes-map/bicycles.data"
+#define ARCHIVE_FILE_PATH @"/Users/admin/Desktop/bicycles.data"
 
 @interface BMPStationsMapView ()
 

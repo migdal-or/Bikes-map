@@ -8,8 +8,14 @@
 
 #import "AppDelegate.h"
 #import "BMPTabs.h"
+#import "BMPStationsMapView.h"
+#import "BMPStationsTableView.h"
+#import "BMPRidesHistoryView.h"
+#import <CoreLocation/CLLocationManager.h>
 
 @interface AppDelegate ()
+
+@property CLLocationManager * locationManager;
 
 @end
 
@@ -19,7 +25,29 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
     UIWindow *window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+    
+    BMPStationsMapView * stationsMapView = [BMPStationsMapView new];
+    //    stationsMapView.tabBarItem = [UITabBarItem new];
+    stationsMapView.title = @"stations map";
+    //    stationsMapView
+    
+    BMPStationsTableView * tableView = [BMPStationsTableView new];
+    tableView.title = @"stations table";
+    
+    BMPRidesHistoryView * ridesHistory = [BMPRidesHistoryView new];
+    ridesHistory.title = @"velobike history";
+    
+    //    [self.tabBar.items[0] setImage: [UIImage imageNamed:@"tabStations 150"]];
+    
+    _locationManager = [CLLocationManager new];
+    if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+        [_locationManager requestWhenInUseAuthorization];
+    }
+
+    
     BMPTabs *vc = [BMPTabs new];
+    
+    vc.viewControllers = @[stationsMapView, tableView, ridesHistory];
     
     window.rootViewController = vc;
     self.window = window;

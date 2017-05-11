@@ -7,13 +7,9 @@
 //
 
 #import "BMPTabs.h"
-#import "BMPStationsMapView.h"
-#import "BMPStationsTableView.h"
-#import "BMPRidesHistoryView.h"
 
 @interface BMPTabs ()
 
-@property CLLocationManager * locationManager;
 
 @end
 
@@ -22,25 +18,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    BMPStationsMapView * stationsMapView = [UIViewController new];// [BMPStationsMapView new];
-//    stationsMapView.tabBarItem = [UITabBarItem new];
-    stationsMapView.title = @"stations map";
-//    stationsMapView
-    
-    BMPStationsTableView * tableView = [BMPStationsTableView new];
-    tableView.title = @"stations table";
-    
-    BMPRidesHistoryView * ridesHistory = [BMPRidesHistoryView new];
-    ridesHistory.title = @"velobike history";
-    
-    self.viewControllers = @[stationsMapView, tableView, ridesHistory];
-
-//    [self.tabBar.items[0] setImage: [UIImage imageNamed:@"tabStations 150"]];
-    
-    _locationManager = [CLLocationManager new];
-    if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-        [_locationManager requestWhenInUseAuthorization];
-    }
 
 }
 
