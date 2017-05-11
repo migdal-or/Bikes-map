@@ -1,0 +1,413 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		84EE21961EC3701E0020EF13 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EE21951EC3701E0020EF13 /* main.m */; };
+		84EE21991EC3701E0020EF13 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EE21981EC3701E0020EF13 /* AppDelegate.m */; };
+		84EE219C1EC3701E0020EF13 /* BMPStationsMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EE219B1EC3701E0020EF13 /* BMPStationsMapView.m */; };
+		84EE219F1EC3701E0020EF13 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84EE219D1EC3701E0020EF13 /* Main.storyboard */; };
+		84EE21A11EC3701E0020EF13 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84EE21A01EC3701E0020EF13 /* Assets.xcassets */; };
+		84EE21A41EC3701E0020EF13 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84EE21A21EC3701E0020EF13 /* LaunchScreen.storyboard */; };
+		84EE21AD1EC3702F0020EF13 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EE21AC1EC3702F0020EF13 /* MapKit.framework */; };
+		84EE21B91EC3743C0020EF13 /* BMPTabs.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EE21B81EC3743C0020EF13 /* BMPTabs.m */; };
+		84EE21BC1EC376890020EF13 /* BMPStationsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EE21BB1EC376890020EF13 /* BMPStationsTableView.m */; };
+		84EE21BF1EC376AE0020EF13 /* BMPRidesHistoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EE21BE1EC376AE0020EF13 /* BMPRidesHistoryView.m */; };
+		84EE21C21EC3E60C0020EF13 /* BMPAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EE21C11EC3E60C0020EF13 /* BMPAnnotation.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		84EE21911EC3701E0020EF13 /* Bikes map try4.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bikes map try4.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		84EE21951EC3701E0020EF13 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		84EE21971EC3701E0020EF13 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		84EE21981EC3701E0020EF13 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		84EE219A1EC3701E0020EF13 /* BMPStationsMapView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMPStationsMapView.h; sourceTree = "<group>"; };
+		84EE219B1EC3701E0020EF13 /* BMPStationsMapView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMPStationsMapView.m; sourceTree = "<group>"; };
+		84EE219E1EC3701E0020EF13 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		84EE21A01EC3701E0020EF13 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		84EE21A31EC3701E0020EF13 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		84EE21A51EC3701E0020EF13 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		84EE21AC1EC3702F0020EF13 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		84EE21B71EC3743C0020EF13 /* BMPTabs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMPTabs.h; sourceTree = "<group>"; };
+		84EE21B81EC3743C0020EF13 /* BMPTabs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMPTabs.m; sourceTree = "<group>"; };
+		84EE21BA1EC376890020EF13 /* BMPStationsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMPStationsTableView.h; sourceTree = "<group>"; };
+		84EE21BB1EC376890020EF13 /* BMPStationsTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMPStationsTableView.m; sourceTree = "<group>"; };
+		84EE21BD1EC376AE0020EF13 /* BMPRidesHistoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMPRidesHistoryView.h; sourceTree = "<group>"; };
+		84EE21BE1EC376AE0020EF13 /* BMPRidesHistoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMPRidesHistoryView.m; sourceTree = "<group>"; };
+		84EE21C01EC3E60C0020EF13 /* BMPAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMPAnnotation.h; sourceTree = "<group>"; };
+		84EE21C11EC3E60C0020EF13 /* BMPAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMPAnnotation.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		84EE218E1EC3701D0020EF13 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84EE21AD1EC3702F0020EF13 /* MapKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		84EE21881EC3701D0020EF13 = {
+			isa = PBXGroup;
+			children = (
+				84EE21931EC3701E0020EF13 /* Bikes map try4 */,
+				84EE21921EC3701E0020EF13 /* Products */,
+				84EE21AB1EC3702E0020EF13 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		84EE21921EC3701E0020EF13 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				84EE21911EC3701E0020EF13 /* Bikes map try4.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		84EE21931EC3701E0020EF13 /* Bikes map try4 */ = {
+			isa = PBXGroup;
+			children = (
+				84EE21971EC3701E0020EF13 /* AppDelegate.h */,
+				84EE21981EC3701E0020EF13 /* AppDelegate.m */,
+				84EE21B31EC373810020EF13 /* Model */,
+				84EE21AF1EC373530020EF13 /* View */,
+				84EE219D1EC3701E0020EF13 /* Main.storyboard */,
+				84EE21A01EC3701E0020EF13 /* Assets.xcassets */,
+				84EE21A21EC3701E0020EF13 /* LaunchScreen.storyboard */,
+				84EE21A51EC3701E0020EF13 /* Info.plist */,
+				84EE21941EC3701E0020EF13 /* Supporting Files */,
+			);
+			path = "Bikes map try4";
+			sourceTree = "<group>";
+		};
+		84EE21941EC3701E0020EF13 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				84EE21951EC3701E0020EF13 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		84EE21AB1EC3702E0020EF13 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				84EE21AC1EC3702F0020EF13 /* MapKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		84EE21AE1EC373490020EF13 /* Stations map */ = {
+			isa = PBXGroup;
+			children = (
+				84EE219A1EC3701E0020EF13 /* BMPStationsMapView.h */,
+				84EE219B1EC3701E0020EF13 /* BMPStationsMapView.m */,
+			);
+			name = "Stations map";
+			sourceTree = "<group>";
+		};
+		84EE21AF1EC373530020EF13 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				84EE21B01EC3735A0020EF13 /* Tabbed controller */,
+				84EE21AE1EC373490020EF13 /* Stations map */,
+				84EE21B21EC3736A0020EF13 /* Stations table view */,
+				84EE21B11EC373640020EF13 /* Rides history */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		84EE21B01EC3735A0020EF13 /* Tabbed controller */ = {
+			isa = PBXGroup;
+			children = (
+				84EE21B71EC3743C0020EF13 /* BMPTabs.h */,
+				84EE21B81EC3743C0020EF13 /* BMPTabs.m */,
+			);
+			name = "Tabbed controller";
+			sourceTree = "<group>";
+		};
+		84EE21B11EC373640020EF13 /* Rides history */ = {
+			isa = PBXGroup;
+			children = (
+				84EE21BD1EC376AE0020EF13 /* BMPRidesHistoryView.h */,
+				84EE21BE1EC376AE0020EF13 /* BMPRidesHistoryView.m */,
+			);
+			name = "Rides history";
+			sourceTree = "<group>";
+		};
+		84EE21B21EC3736A0020EF13 /* Stations table view */ = {
+			isa = PBXGroup;
+			children = (
+				84EE21BA1EC376890020EF13 /* BMPStationsTableView.h */,
+				84EE21BB1EC376890020EF13 /* BMPStationsTableView.m */,
+			);
+			name = "Stations table view";
+			sourceTree = "<group>";
+		};
+		84EE21B31EC373810020EF13 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				84EE21C31EC3E6100020EF13 /* Annotation */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		84EE21C31EC3E6100020EF13 /* Annotation */ = {
+			isa = PBXGroup;
+			children = (
+				84EE21C01EC3E60C0020EF13 /* BMPAnnotation.h */,
+				84EE21C11EC3E60C0020EF13 /* BMPAnnotation.m */,
+			);
+			name = Annotation;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		84EE21901EC3701D0020EF13 /* Bikes map try4 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 84EE21A81EC3701E0020EF13 /* Build configuration list for PBXNativeTarget "Bikes map try4" */;
+			buildPhases = (
+				84EE218D1EC3701D0020EF13 /* Sources */,
+				84EE218E1EC3701D0020EF13 /* Frameworks */,
+				84EE218F1EC3701D0020EF13 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Bikes map try4";
+			productName = "Bikes map try4";
+			productReference = 84EE21911EC3701E0020EF13 /* Bikes map try4.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		84EE21891EC3701D0020EF13 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = Admin;
+				TargetAttributes = {
+					84EE21901EC3701D0020EF13 = {
+						CreatedOnToolsVersion = 8.3.1;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 84EE218C1EC3701D0020EF13 /* Build configuration list for PBXProject "Bikes map try4" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 84EE21881EC3701D0020EF13;
+			productRefGroup = 84EE21921EC3701E0020EF13 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				84EE21901EC3701D0020EF13 /* Bikes map try4 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		84EE218F1EC3701D0020EF13 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84EE21A41EC3701E0020EF13 /* LaunchScreen.storyboard in Resources */,
+				84EE21A11EC3701E0020EF13 /* Assets.xcassets in Resources */,
+				84EE219F1EC3701E0020EF13 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		84EE218D1EC3701D0020EF13 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84EE219C1EC3701E0020EF13 /* BMPStationsMapView.m in Sources */,
+				84EE21991EC3701E0020EF13 /* AppDelegate.m in Sources */,
+				84EE21961EC3701E0020EF13 /* main.m in Sources */,
+				84EE21BF1EC376AE0020EF13 /* BMPRidesHistoryView.m in Sources */,
+				84EE21C21EC3E60C0020EF13 /* BMPAnnotation.m in Sources */,
+				84EE21BC1EC376890020EF13 /* BMPStationsTableView.m in Sources */,
+				84EE21B91EC3743C0020EF13 /* BMPTabs.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		84EE219D1EC3701E0020EF13 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				84EE219E1EC3701E0020EF13 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		84EE21A21EC3701E0020EF13 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				84EE21A31EC3701E0020EF13 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		84EE21A61EC3701E0020EF13 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		84EE21A71EC3701E0020EF13 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		84EE21A91EC3701E0020EF13 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "Bikes map try4/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "mz.Bikes-map-try4";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		84EE21AA1EC3701E0020EF13 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "Bikes map try4/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "mz.Bikes-map-try4";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		84EE218C1EC3701D0020EF13 /* Build configuration list for PBXProject "Bikes map try4" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				84EE21A61EC3701E0020EF13 /* Debug */,
+				84EE21A71EC3701E0020EF13 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		84EE21A81EC3701E0020EF13 /* Build configuration list for PBXNativeTarget "Bikes map try4" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				84EE21A91EC3701E0020EF13 /* Debug */,
+				84EE21AA1EC3701E0020EF13 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 84EE21891EC3701D0020EF13 /* Project object */;
+}
