@@ -6,30 +6,18 @@
 //  Copyright © 2017 Dmitry A. Zvorykin. All rights reserved.
 //
 
-//GET /ride/history HTTP/1.1
-//Host: apivelobike.velobike.ru
-//SessionId:
-//Cache-Control: no-cache
-//Postman-Token: a25cadfb-ce1d-85a1-be9f-154abfa26b99
-//
-//POST /profile/authorize HTTP/1.1
-//Host: apivelobike.velobike.ru
-//Authorization: Basic
-//Cache-Control: no-cache
-//Postman-Token: 1f1de1f3-754b-f6fa-1cec-046b401775e7
-//Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
-
-
-
 #import "BMPStationsMapView.h"
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "BMPAnnotation.h"
+
+// static const
 #define TABBAR_HEIGHT 100
 #define TOOFAR_LABEL_HEIGHT 60
+
 #define LOCAL_MODE YES // just to skip all this iTunes bullshit and load data from local file )
 #define STORE_FILE YES // save itunes data if non-local mode call?
-#define ARCHIVE_FILE_PATH @"/Users/admin/Desktop/bicycles.data"
+#define ARCHIVE_FILE_PATH @"/Users/user/Desktop/repo/Bikes-map/bicycles.data"
 
 @interface BMPStationsMapView ()
 
@@ -48,14 +36,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    _locationManager = [CLLocationManager new];
+    [_locationManager requestWhenInUseAuthorization];
+    [_locationManager startUpdatingLocation];
+    _locationManager.delegate = self;
+
+    
+    
     _toolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height-TABBAR_HEIGHT, self.view.bounds.size.width, TABBAR_HEIGHT)];
     
-    UIBarItem *tellCoordsButton = [[UIBarButtonItem alloc] initWithTitle:@"coords" style:UIBarButtonItemStylePlain target:self action:@selector(tellCoords:)];
+    UIBarItem *tellCoordsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"logo.png"] style:UIBarButtonItemStylePlain target:self action:@selector(tellCoords:)];
+//    UIBarItem *tellCoordsButton = [[UIBarButtonItem alloc] initWithTitle:@"coords" style:UIBarButtonItemStylePlain target:self action:@selector(tellCoords:)];
     
-    [tellCoordsButton setTitle: @"dfgfdg"];
-    [tellCoordsButton setImage:[UIImage imageNamed:@"logo.png"]];
+//    [tellCoordsButton setTitle: @"dfgfdg"];
+//    [tellCoordsButton setImage:[UIImage imageNamed:@"logo.png"]];
     [_toolBar setBackgroundColor:[UIColor redColor]];   //почему получается розовый?
     _toolBarItems = @[ tellCoordsButton ];
+
     [_toolBar setItems:_toolBarItems];
     [self.view addSubview:_toolBar];
     
@@ -175,14 +172,10 @@
     [_bikesMap setRegion:region animated:YES];
     
     
-    
-    
     CLLocationCoordinate2D MoscowCenter = {55.755786, 37.617633};
-    
     CLLocation *MoscowLocation = [[CLLocation alloc]
                                initWithLatitude:MoscowCenter.latitude
                                longitude:MoscowCenter.longitude];
-    
     CLLocation *myLocation = [[CLLocation alloc]
                                 initWithLatitude:userLocation.coordinate.latitude
                                 longitude:userLocation.coordinate.longitude];
