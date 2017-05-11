@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 
-@interface BMPStationsMapView : UIViewController<MKMapViewDelegate, CLLocationManagerDelegate>
+@interface BMPStationsMapView : UIViewController<MKMapViewDelegate>
 
 
 @end

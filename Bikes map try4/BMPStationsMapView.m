@@ -12,8 +12,9 @@
 #import "BMPAnnotation.h"
 
 // static const
-#define TABBAR_HEIGHT 100
-#define TOOFAR_LABEL_HEIGHT 60
+
+static CGFloat const TABBAR_HEIGHT = 100;
+static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 #define LOCAL_MODE YES // just to skip all this iTunes bullshit and load data from local file )
 #define STORE_FILE YES // save itunes data if non-local mode call?
@@ -22,9 +23,7 @@
 @interface BMPStationsMapView ()
 
 @property (nonatomic, strong) MKMapView *bikesMap;
-@property (nonatomic, strong) CLLocationManager *locationManager;
-@property (nonatomic, strong) UIToolbar *toolBar;
-@property (nonatomic, strong) NSArray<UIBarButtonItem *> *toolBarItems;
+@property (nonatomic, strong) UIView *toolBar;
 @property (nonatomic, strong) UILabel * youGotTooFarLabel;
 
 @end
@@ -36,24 +35,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    _locationManager = [CLLocationManager new];
-    [_locationManager requestWhenInUseAuthorization];
-    [_locationManager startUpdatingLocation];
-    _locationManager.delegate = self;
+    _toolBar = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height-TABBAR_HEIGHT, self.view.bounds.size.width, TABBAR_HEIGHT)];
+    
+    UIButton *tellCoordsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *buttonImage = [UIImage imageNamed:@"logo"];
+    tellCoordsButton.frame = CGRectMake(0, 0, buttonImage.size.width, buttonImage.size.height);
+    [tellCoordsButton setImage:buttonImage forState:UIControlStateNormal];
+    [tellCoordsButton addTarget:self action:@selector(tellCoords:) forControlEvents:UIControlEventTouchUpInside];
+    [_toolBar setBackgroundColor:[UIColor redColor]];
 
-    
-    
-    _toolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height-TABBAR_HEIGHT, self.view.bounds.size.width, TABBAR_HEIGHT)];
-    
-    UIBarItem *tellCoordsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"logo.png"] style:UIBarButtonItemStylePlain target:self action:@selector(tellCoords:)];
-//    UIBarItem *tellCoordsButton = [[UIBarButtonItem alloc] initWithTitle:@"coords" style:UIBarButtonItemStylePlain target:self action:@selector(tellCoords:)];
-    
-//    [tellCoordsButton setTitle: @"dfgfdg"];
-//    [tellCoordsButton setImage:[UIImage imageNamed:@"logo.png"]];
-    [_toolBar setBackgroundColor:[UIColor redColor]];   //почему получается розовый?
-    _toolBarItems = @[ tellCoordsButton ];
-
-    [_toolBar setItems:_toolBarItems];
+    [_toolBar addSubview:tellCoordsButton];
     [self.view addSubview:_toolBar];
     
     _bikesMap = [MKMapView new];

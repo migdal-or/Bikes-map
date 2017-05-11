@@ -74,8 +74,6 @@
 		84EE21931EC3701E0020EF13 /* Bikes map try4 */ = {
 			isa = PBXGroup;
 			children = (
-				84EE21971EC3701E0020EF13 /* AppDelegate.h */,
-				84EE21981EC3701E0020EF13 /* AppDelegate.m */,
 				84EE21B31EC373810020EF13 /* Model */,
 				84EE21AF1EC373530020EF13 /* View */,
 				84EE219D1EC3701E0020EF13 /* Main.storyboard */,
@@ -90,6 +88,8 @@
 		84EE21941EC3701E0020EF13 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				84EE21971EC3701E0020EF13 /* AppDelegate.h */,
+				84EE21981EC3701E0020EF13 /* AppDelegate.m */,
 				84EE21951EC3701E0020EF13 /* main.m */,
 			);
 			name = "Supporting Files";

@@ -13,6 +13,8 @@
 
 @interface BMPTabs ()
 
+@property CLLocationManager * locationManager;
+
 @end
 
 @implementation BMPTabs
@@ -20,9 +22,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    BMPStationsMapView * stationsMapView = [BMPStationsMapView new];
+    BMPStationsMapView * stationsMapView = [UIViewController new];// [BMPStationsMapView new];
 //    stationsMapView.tabBarItem = [UITabBarItem new];
     stationsMapView.title = @"stations map";
+//    stationsMapView
     
     BMPStationsTableView * tableView = [BMPStationsTableView new];
     tableView.title = @"stations table";
@@ -32,9 +35,11 @@
     
     self.viewControllers = @[stationsMapView, tableView, ridesHistory];
 
-    CLLocationManager *locationManager = [CLLocationManager new];
-    if ([locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-        [locationManager requestWhenInUseAuthorization];
+//    [self.tabBar.items[0] setImage: [UIImage imageNamed:@"tabStations 150"]];
+    
+    _locationManager = [CLLocationManager new];
+    if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+        [_locationManager requestWhenInUseAuthorization];
     }
 
 }
