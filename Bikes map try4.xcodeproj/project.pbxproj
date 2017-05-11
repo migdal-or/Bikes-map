@@ -10,11 +10,9 @@
 		84EE21961EC3701E0020EF13 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EE21951EC3701E0020EF13 /* main.m */; };
 		84EE21991EC3701E0020EF13 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EE21981EC3701E0020EF13 /* AppDelegate.m */; };
 		84EE219C1EC3701E0020EF13 /* BMPStationsMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EE219B1EC3701E0020EF13 /* BMPStationsMapView.m */; };
-		84EE219F1EC3701E0020EF13 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84EE219D1EC3701E0020EF13 /* Main.storyboard */; };
 		84EE21A11EC3701E0020EF13 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84EE21A01EC3701E0020EF13 /* Assets.xcassets */; };
 		84EE21A41EC3701E0020EF13 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84EE21A21EC3701E0020EF13 /* LaunchScreen.storyboard */; };
 		84EE21AD1EC3702F0020EF13 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EE21AC1EC3702F0020EF13 /* MapKit.framework */; };
-		84EE21B91EC3743C0020EF13 /* BMPTabs.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EE21B81EC3743C0020EF13 /* BMPTabs.m */; };
 		84EE21BC1EC376890020EF13 /* BMPStationsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EE21BB1EC376890020EF13 /* BMPStationsTableView.m */; };
 		84EE21BF1EC376AE0020EF13 /* BMPRidesHistoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EE21BE1EC376AE0020EF13 /* BMPRidesHistoryView.m */; };
 		84EE21C21EC3E60C0020EF13 /* BMPAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EE21C11EC3E60C0020EF13 /* BMPAnnotation.m */; };
@@ -27,13 +25,10 @@
 		84EE21981EC3701E0020EF13 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		84EE219A1EC3701E0020EF13 /* BMPStationsMapView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMPStationsMapView.h; sourceTree = "<group>"; };
 		84EE219B1EC3701E0020EF13 /* BMPStationsMapView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMPStationsMapView.m; sourceTree = "<group>"; };
-		84EE219E1EC3701E0020EF13 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		84EE21A01EC3701E0020EF13 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		84EE21A31EC3701E0020EF13 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84EE21A51EC3701E0020EF13 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84EE21AC1EC3702F0020EF13 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		84EE21B71EC3743C0020EF13 /* BMPTabs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMPTabs.h; sourceTree = "<group>"; };
-		84EE21B81EC3743C0020EF13 /* BMPTabs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMPTabs.m; sourceTree = "<group>"; };
 		84EE21BA1EC376890020EF13 /* BMPStationsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMPStationsTableView.h; sourceTree = "<group>"; };
 		84EE21BB1EC376890020EF13 /* BMPStationsTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMPStationsTableView.m; sourceTree = "<group>"; };
 		84EE21BD1EC376AE0020EF13 /* BMPRidesHistoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMPRidesHistoryView.h; sourceTree = "<group>"; };
@@ -76,7 +71,6 @@
 			children = (
 				84EE21B31EC373810020EF13 /* Model */,
 				84EE21AF1EC373530020EF13 /* View */,
-				84EE219D1EC3701E0020EF13 /* Main.storyboard */,
 				84EE21A01EC3701E0020EF13 /* Assets.xcassets */,
 				84EE21A21EC3701E0020EF13 /* LaunchScreen.storyboard */,
 				84EE21A51EC3701E0020EF13 /* Info.plist */,
@@ -115,21 +109,11 @@
 		84EE21AF1EC373530020EF13 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				84EE21B01EC3735A0020EF13 /* Tabbed controller */,
 				84EE21AE1EC373490020EF13 /* Stations map */,
 				84EE21B21EC3736A0020EF13 /* Stations table view */,
 				84EE21B11EC373640020EF13 /* Rides history */,
 			);
 			name = View;
-			sourceTree = "<group>";
-		};
-		84EE21B01EC3735A0020EF13 /* Tabbed controller */ = {
-			isa = PBXGroup;
-			children = (
-				84EE21B71EC3743C0020EF13 /* BMPTabs.h */,
-				84EE21B81EC3743C0020EF13 /* BMPTabs.m */,
-			);
-			name = "Tabbed controller";
 			sourceTree = "<group>";
 		};
 		84EE21B11EC373640020EF13 /* Rides history */ = {
@@ -227,7 +211,6 @@
 			files = (
 				84EE21A41EC3701E0020EF13 /* LaunchScreen.storyboard in Resources */,
 				84EE21A11EC3701E0020EF13 /* Assets.xcassets in Resources */,
-				84EE219F1EC3701E0020EF13 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,21 +227,12 @@
 				84EE21BF1EC376AE0020EF13 /* BMPRidesHistoryView.m in Sources */,
 				84EE21C21EC3E60C0020EF13 /* BMPAnnotation.m in Sources */,
 				84EE21BC1EC376890020EF13 /* BMPStationsTableView.m in Sources */,
-				84EE21B91EC3743C0020EF13 /* BMPTabs.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		84EE219D1EC3701E0020EF13 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				84EE219E1EC3701E0020EF13 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		84EE21A21EC3701E0020EF13 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

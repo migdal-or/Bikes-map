@@ -15,7 +15,7 @@
 static CGFloat const TABBAR_HEIGHT = 100;
 static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
-#define LOCAL_MODE NO // just to skip all this iTunes bullshit and load data from local file )
+#define LOCAL_MODE YES // just to skip all this iTunes bullshit and load data from local file )
 #define STORE_FILE YES // save itunes data if non-local mode call?
 #define ARCHIVE_FILE_PATH @"/Users/admin/Desktop/bicycles.data"
 
@@ -33,7 +33,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+        
     _toolBar = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height-TABBAR_HEIGHT, self.view.bounds.size.width, TABBAR_HEIGHT)];
     
     UIButton *tellCoordsButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -86,6 +86,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     if (LOCAL_MODE) {
         data = [[NSData alloc] initWithContentsOfFile:ARCHIVE_FILE_PATH];
         parkings = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"init stations from file done");
         [self annotateParkings: [parkings objectForKey:@"Items"]];
     } else {
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://apivelobike.velobike.ru/ride/parkings"]
@@ -120,17 +121,14 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 }
 
 - (void)annotateParkings: (NSDictionary *) parkings {
-    NSLog(@"%d", [parkings count]);
-    CLLocationCoordinate2D coordinate = {55.755786, 37.617633}; //kill
-    NSString *lat, *lon;
-
+    NSLog(@"annotating %d stations", [parkings count]);
+    CLLocationCoordinate2D coordinate;
     for (NSArray* station in parkings) {
-//        NSLog(@"%@", station);
-        lat = [[station valueForKey:@"Position"] valueForKey:@"Lat"];
-        lon = [[station valueForKey:@"Position"] valueForKey:@"Lon"];
-        coordinate.latitude = [lat doubleValue];
-        coordinate.longitude = [lon doubleValue];
-        BMPAnnotation * annot = [[BMPAnnotation alloc] initWithTitle:[station valueForKey:@"Id"] subtitle:[station valueForKey:@"Address"] location: coordinate];
+        coordinate.latitude  = [[[station valueForKey:@"Position"] valueForKey:@"Lat"] doubleValue];
+        coordinate.longitude = [[[station valueForKey:@"Position"] valueForKey:@"Lon"] doubleValue];
+        BMPAnnotation * annot = [[BMPAnnotation alloc] initWithTitle:[station valueForKey:@"Id"]
+                                                            subtitle:[station valueForKey:@"Address"]
+                                                            location:coordinate];
         [_bikesMap addAnnotation:annot];
     }
 }

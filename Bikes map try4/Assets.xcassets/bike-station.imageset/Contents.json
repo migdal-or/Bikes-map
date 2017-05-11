@@ -2,15 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "icon-bikeandride 2.png",
+      "filename" : "app icon 32.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "app icon 50.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
+      "filename" : "app icon 75.png",
       "scale" : "3x"
     }
   ],

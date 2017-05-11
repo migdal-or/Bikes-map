@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "BMPTabs.h"
 #import "BMPStationsMapView.h"
 #import "BMPStationsTableView.h"
 #import "BMPRidesHistoryView.h"
@@ -15,7 +14,7 @@
 
 @interface AppDelegate ()
 
-@property CLLocationManager * locationManager;
+@property (nonatomic, strong) CLLocationManager * locationManager;
 
 @end
 
@@ -37,17 +36,24 @@
     BMPRidesHistoryView * ridesHistory = [BMPRidesHistoryView new];
     ridesHistory.title = @"velobike history";
     
-    //    [self.tabBar.items[0] setImage: [UIImage imageNamed:@"tabStations 150"]];
-    
     _locationManager = [CLLocationManager new];
     if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
         [_locationManager requestWhenInUseAuthorization];
     }
 
     
-    BMPTabs *vc = [BMPTabs new];
-    
+    UITabBarController *vc = [UITabBarController new];    
     vc.viewControllers = @[stationsMapView, tableView, ridesHistory];
+    
+    UIImage *tabBarImage = [[UIImage imageNamed:@"tabStations-grid"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    UITabBarItem *tabBarItem = [vc.tabBar.items objectAtIndex:1];
+    [tabBarItem setImage:tabBarImage];
+    [tabBarItem setSelectedImage:tabBarImage];
+
+    tabBarImage = [[UIImage imageNamed:@"tabStations"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    tabBarItem = [vc.tabBar.items objectAtIndex:0];
+    [tabBarItem setImage:tabBarImage];
+    [tabBarItem setSelectedImage:tabBarImage];
     
     window.rootViewController = vc;
     self.window = window;
