@@ -12,7 +12,7 @@
 #import "BMPAnnotation.h"
 
 // static const
-static CGFloat const TABBAR_HEIGHT = 100;
+static CGFloat const TOOLBAR_HEIGHT = 100;
 static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 #define LOCAL_MODE YES // just to skip all this iTunes bullshit and load data from local file )
@@ -24,6 +24,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 @property (nonatomic, strong) MKMapView *bikesMap;
 @property (nonatomic, strong) UIView *toolBar;
 @property (nonatomic, strong) UILabel * youGotTooFarLabel;
+@property (nonatomic, assign) CGFloat tabBarHeight;
 
 @end
 
@@ -33,18 +34,8 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-        
-    _toolBar = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height-TABBAR_HEIGHT, self.view.bounds.size.width, TABBAR_HEIGHT)];
-    
-    UIButton *tellCoordsButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *buttonImage = [UIImage imageNamed:@"logo"];
-    tellCoordsButton.frame = CGRectMake(0, 0, buttonImage.size.width, buttonImage.size.height);
-    [tellCoordsButton setImage:buttonImage forState:UIControlStateNormal];
-    [tellCoordsButton addTarget:self action:@selector(tellCoords:) forControlEvents:UIControlEventTouchUpInside];
-    [_toolBar setBackgroundColor:[UIColor redColor]];
-
-    [_toolBar addSubview:tellCoordsButton];
-    [self.view addSubview:_toolBar];
+   
+    CGFloat tabBarHeight = self.tabBarController.tabBar.bounds.size.height; //столько надо отступить снизу чтобы не прятать данные под таббаром
     
     _bikesMap = [MKMapView new];
     _bikesMap.delegate = self;
@@ -54,10 +45,10 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     
     // position map view
     _bikesMap.translatesAutoresizingMaskIntoConstraints = NO;
-    id views = @{ @"mapView": _bikesMap , @"toolBar": _toolBar };
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[mapView]|" options:0 metrics:nil views:views]];
-    // replace TABBAR_HEIGHT here
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[mapView]-100-|" options:0 metrics:nil views:views]];
+    id views = @{ @"mapView": _bikesMap };
+    NSString *verticalConstraint = [[NSString alloc] initWithFormat:@"V:|[mapView]-%d-|", (int)tabBarHeight];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:verticalConstraint options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[mapView]|"    options:0 metrics:nil views:views]];
     
     // add a label to show if you are too far
     _youGotTooFarLabel = [UILabel new];
@@ -72,12 +63,23 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     [self.view addSubview:_youGotTooFarLabel];
 
     // move view to moscow
-    MKCoordinateSpan span = MKCoordinateSpanMake(0.40, 0.51);
-    CLLocationCoordinate2D coordinate = {55.755786, 37.617633};
-    MKCoordinateRegion region = {coordinate, span};
+    MKCoordinateRegion region = {{55.755786, 37.617633}, MKCoordinateSpanMake(0.40, 0.51)};
     [self.bikesMap setRegion:region animated:YES];
 
+    UIButton *zoomPlusButton = [UIButton buttonWithType: UIButtonTypeCustom];
+    [zoomPlusButton setImage:[UIImage imageNamed:@"zoomplus"] forState: UIControlStateNormal];
+    zoomPlusButton.frame = CGRectMake(self.view.bounds.size.width-50, 100, 41, 39);
+    [_bikesMap addSubview:zoomPlusButton];
+    UIButton *zoomMinusButton = [UIButton buttonWithType: UIButtonTypeCustom];
+    UIButton *locateButton = [UIButton buttonWithType: UIButtonTypeCustom];
+    [locateButton setImage:[UIImage imageNamed:@"zoomcenter"] forState: UIControlStateNormal];
+    locateButton.frame = CGRectMake(self.view.bounds.size.width-50, 139, 41, 39);
+    [_bikesMap addSubview:locateButton];
+    [zoomMinusButton setImage:[UIImage imageNamed:@"zoomminus"] forState: UIControlStateNormal];
+    zoomMinusButton.frame = CGRectMake(self.view.bounds.size.width-50, 178, 41, 39);
+    [_bikesMap addSubview:zoomMinusButton];
     
+    return;
     
     // start getting stations from api or local file
     __block NSDictionary * parkings;

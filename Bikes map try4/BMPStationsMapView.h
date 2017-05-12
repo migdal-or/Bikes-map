@@ -10,7 +10,5 @@
 #import <MapKit/MapKit.h>
 
 @interface BMPStationsMapView : UIViewController<MKMapViewDelegate>
-
-
 @end
 

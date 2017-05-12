@@ -9,6 +9,7 @@
 #import "BMPRidesHistoryView.h"
 
 @interface BMPRidesHistoryView ()
+@property (nonatomic, assign) CGFloat tabBarHeight;
 
 @end
 

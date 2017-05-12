@@ -10,6 +10,8 @@
 
 @interface BMPStationsTableView ()
 
+@property (nonatomic, assign) CGFloat tabBarHeight;
+
 @end
 
 @implementation BMPStationsTableView
