@@ -10,5 +10,19 @@
 #import <MapKit/MapKit.h>
 
 @interface BMPStationsMapView : UIViewController<MKMapViewDelegate>
+
+//typedef enum BMPzoomButtonValues : NSUInteger {
+//} BMPzoomButtons;
+
+typedef NS_ENUM(NSUInteger, BMPzoomButtonValues) {
+    BMPzoomPlus,
+    BMPzoomCenter,
+    BMPzoomMinus,
+//    UIControlContentVerticalAlignmentCenter  = 0,
+//    UIControlContentVerticalAlignmentTop     = 1,
+//    UIControlContentVerticalAlignmentBottom  = 2,
+//    UIControlContentVerticalAlignmentFill    = 3,
+};
+
 @end
 

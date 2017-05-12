@@ -8,11 +8,9 @@
 
 #import "BMPStationsMapView.h"
 #import <MapKit/MapKit.h>
-//#import <CoreLocation/CoreLocation.h>
 #import "BMPAnnotation.h"
 
 // static const
-static CGFloat const TOOLBAR_HEIGHT = 100;
 static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 #define LOCAL_MODE YES // just to skip all this iTunes bullshit and load data from local file )
@@ -22,8 +20,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 @interface BMPStationsMapView ()
 
 @property (nonatomic, strong) MKMapView *bikesMap;
-@property (nonatomic, strong) UIView *toolBar;
-@property (nonatomic, strong) UILabel * youGotTooFarLabel;
+@property (nonatomic, strong) UILabel *youGotTooFarLabel;
 @property (nonatomic, assign) CGFloat tabBarHeight;
 
 @end
@@ -69,14 +66,22 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     UIButton *zoomPlusButton = [UIButton buttonWithType: UIButtonTypeCustom];
     [zoomPlusButton setImage:[UIImage imageNamed:@"zoomplus"] forState: UIControlStateNormal];
     zoomPlusButton.frame = CGRectMake(self.view.bounds.size.width-50, 100, 41, 39);
+    zoomPlusButton.tag = BMPzoomPlus;
+    [zoomPlusButton addTarget:self action:@selector(zoomBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     [_bikesMap addSubview:zoomPlusButton];
-    UIButton *zoomMinusButton = [UIButton buttonWithType: UIButtonTypeCustom];
+    
     UIButton *locateButton = [UIButton buttonWithType: UIButtonTypeCustom];
     [locateButton setImage:[UIImage imageNamed:@"zoomcenter"] forState: UIControlStateNormal];
     locateButton.frame = CGRectMake(self.view.bounds.size.width-50, 139, 41, 39);
+    locateButton.tag = BMPzoomCenter;
+    [locateButton addTarget:self action:@selector(zoomBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     [_bikesMap addSubview:locateButton];
+    
+    UIButton *zoomMinusButton = [UIButton buttonWithType: UIButtonTypeCustom];
     [zoomMinusButton setImage:[UIImage imageNamed:@"zoomminus"] forState: UIControlStateNormal];
     zoomMinusButton.frame = CGRectMake(self.view.bounds.size.width-50, 178, 41, 39);
+    zoomMinusButton.tag = BMPzoomMinus;
+    [zoomMinusButton addTarget:self action:@selector(zoomBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     [_bikesMap addSubview:zoomMinusButton];
     
     return;
@@ -91,9 +96,10 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
         NSLog(@"init stations from file done");
         [self annotateParkings: [parkings objectForKey:@"Items"]];
     } else {
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://apivelobike.velobike.ru/ride/parkings"]
-                                                               cachePolicy:NSURLRequestUseProtocolCachePolicy
-                                                           timeoutInterval:10.0];
+        NSMutableURLRequest *request = [NSMutableURLRequest
+                                        requestWithURL:[NSURL URLWithString:@"http://apivelobike.velobike.ru/ride/parkings"]
+                                           cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                      timeoutInterval:10.0];
         [request setHTTPMethod:@"GET"];
         
         NSURLSession *session = [NSURLSession sharedSession];
@@ -132,6 +138,28 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
                                                             subtitle:[station valueForKey:@"Address"]
                                                             location:coordinate];
         [_bikesMap addAnnotation:annot];
+    }
+}
+
+- (void)zoomBtnClicked:(UIButton*)sender{
+    switch (sender.tag)
+    {
+        case BMPzoomPlus:
+            NSLog(@"plus");
+            break;
+            
+        case BMPzoomCenter:
+            NSLog(@"center");
+            break;
+            
+        case BMPzoomMinus:
+            NSLog(@"minus");
+            break;
+
+        default:
+            NSLog(@"wtf?");
+            break;
+            
     }
 }
 
