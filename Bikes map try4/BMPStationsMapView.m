@@ -9,6 +9,7 @@
 #import "BMPStationsMapView.h"
 #import <MapKit/MapKit.h>
 #import "BMPAnnotation.h"
+//#import <mapkit/MKGeometry.h>
 
 // static const
 static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
@@ -22,6 +23,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 @property (nonatomic, strong) MKMapView *bikesMap;
 @property (nonatomic, strong) UILabel *youGotTooFarLabel;
 @property (nonatomic, assign) CGFloat tabBarHeight;
+@property (nonatomic, assign) BOOL locationWasObtained;
 
 @end
 
@@ -31,6 +33,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _locationWasObtained = NO;
    
     CGFloat tabBarHeight = self.tabBarController.tabBar.bounds.size.height; //столько надо отступить снизу чтобы не прятать данные под таббаром
     
@@ -144,22 +147,41 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 - (void)zoomBtnClicked:(UIButton*)sender{
     switch (sender.tag)
     {
-        case BMPzoomPlus:
-            NSLog(@"plus");
+        case BMPzoomPlus: {
+            MKCoordinateRegion region = _bikesMap.region;
+            MKCoordinateSpan span = _bikesMap.region.span;
+            span.latitudeDelta/=2;
+            span.longitudeDelta/=2;
+            region.span=span;
+            [_bikesMap setRegion:region animated:YES]; }
             break;
             
-        case BMPzoomCenter:
-            NSLog(@"center");
+        case BMPzoomCenter: if (_locationWasObtained) {
+            MKCoordinateRegion region;
+            MKCoordinateSpan span;
+            span.latitudeDelta = 0.05;
+            span.longitudeDelta = 0.05;
+            CLLocationCoordinate2D location;
+            location.latitude = _bikesMap.userLocation.coordinate.latitude;
+            location.longitude = _bikesMap.userLocation.coordinate.longitude;
+            region.span = span;
+            region.center = location;
+            [_bikesMap setRegion:region animated:YES]; }
             break;
             
-        case BMPzoomMinus:
-            NSLog(@"minus");
+        case BMPzoomMinus: {
+            MKCoordinateRegion region = _bikesMap.region;
+            MKCoordinateSpan span = _bikesMap.region.span;
+            span.latitudeDelta*=2;
+            span.longitudeDelta*=2;
+            region.span=span;
+            [_bikesMap setRegion:region animated:YES]; }
             break;
 
-        default:
+        default: {
             NSLog(@"wtf?");
             break;
-            
+        }
     }
 }
 
@@ -176,7 +198,9 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 #pragma mark Map methods
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
-    NSLog(@"did update location map"); //this one works
+//    NSLog(@"did update location map"); //this one works
+    _locationWasObtained = YES;
+    
     
     MKCoordinateRegion region;
     MKCoordinateSpan span;
