@@ -6,6 +6,11 @@
 //  Copyright © 2017 Dmitry A. Zvorykin. All rights reserved.
 //
 
+// TODO:
+// 1. move stations load and store service to model
+// 2. table view
+// 3. distance to each station and search of nearest
+
 #import "BMPStationsMapView.h"
 #import <MapKit/MapKit.h>
 #import "BMPAnnotation.h"
