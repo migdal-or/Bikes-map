@@ -62,24 +62,29 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     MKCoordinateRegion region = {{55.755786, 37.617633}, MKCoordinateSpanMake(0.40, 0.51)};
     [self.bikesMap setRegion:region animated:YES];
 
+    // implement zoom plus, minus, center buttons
+    static CGFloat const imageRightOffset = 0.2;   // in button image width X
+    static CGFloat const imagesTopOffset = 0.1;   // in screen size height X
     UIButton *zoomPlusButton = [UIButton buttonWithType: UIButtonTypeCustom];
-    UIImage *buttonImage = [UIImage imageNamed:@"zoomplus"]; //TODO 5
+    UIImage *buttonImage = [UIImage imageNamed:@"zoomplus"];
     [zoomPlusButton setImage:buttonImage forState: UIControlStateNormal];
-    zoomPlusButton.frame = CGRectMake(self.view.bounds.size.width-50, 100, buttonImage.size.width, buttonImage.size.height);
+    zoomPlusButton.frame = CGRectMake(self.view.bounds.size.width-buttonImage.size.width*(1+imageRightOffset), self.view.bounds.size.height*imagesTopOffset, buttonImage.size.width, buttonImage.size.height);
     zoomPlusButton.tag = BMPzoomPlus;
     [zoomPlusButton addTarget:self action:@selector(zoomBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     [_bikesMap addSubview:zoomPlusButton];
     
     UIButton *locateButton = [UIButton buttonWithType: UIButtonTypeCustom];
-    [locateButton setImage:[UIImage imageNamed:@"zoomcenter"] forState: UIControlStateNormal];
-    locateButton.frame = CGRectMake(self.view.bounds.size.width-50, 139, 41, 39);
+    buttonImage = [UIImage imageNamed:@"zoomcenter"];
+    [locateButton setImage:buttonImage forState: UIControlStateNormal];
+    locateButton.frame = CGRectMake(self.view.bounds.size.width-buttonImage.size.width*(1+imageRightOffset), self.view.bounds.size.height*imagesTopOffset+buttonImage.size.height, buttonImage.size.width, buttonImage.size.height);
     locateButton.tag = BMPzoomCenter;
     [locateButton addTarget:self action:@selector(zoomBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     [_bikesMap addSubview:locateButton];
     
     UIButton *zoomMinusButton = [UIButton buttonWithType: UIButtonTypeCustom];
-    [zoomMinusButton setImage:[UIImage imageNamed:@"zoomminus"] forState: UIControlStateNormal];
-    zoomMinusButton.frame = CGRectMake(self.view.bounds.size.width-50, 178, 41, 39);
+    buttonImage = [UIImage imageNamed:@"zoomminus"];
+    [zoomMinusButton setImage:buttonImage forState: UIControlStateNormal];
+    zoomMinusButton.frame = CGRectMake(self.view.bounds.size.width-buttonImage.size.width*(1+imageRightOffset), self.view.bounds.size.height*imagesTopOffset+2*buttonImage.size.height, buttonImage.size.width, buttonImage.size.height);
     zoomMinusButton.tag = BMPzoomMinus;
     [zoomMinusButton addTarget:self action:@selector(zoomBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     [_bikesMap addSubview:zoomMinusButton];
@@ -128,11 +133,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
             location.longitude = _bikesMap.userLocation.coordinate.longitude;
             region.span = span;
             region.center = location;
-            [_bikesMap setRegion:region animated:YES];
-        
-            NSDictionary * parkings;
-            parkings = [BMPLoadStations loadStations];
-}
+            [_bikesMap setRegion:region animated:YES]; }
             break;
             
         case BMPzoomMinus: {
