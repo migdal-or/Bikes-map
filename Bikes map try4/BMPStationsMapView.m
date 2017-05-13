@@ -106,13 +106,10 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 - (void)annotateParkings: (NSDictionary *) parkings {
     if (DEBUGGING) { NSLog(@"annotating %d stations", [parkings count]); }
-    CLLocationCoordinate2D coordinate;
-    for (NSArray* station in parkings) {
-        coordinate.latitude  = [[[station valueForKey:@"Position"] valueForKey:@"Lat"] doubleValue];
-        coordinate.longitude = [[[station valueForKey:@"Position"] valueForKey:@"Lon"] doubleValue];
-        BMPAnnotation * annot = [[BMPAnnotation alloc] initWithTitle:[station valueForKey:@"Id"]
-                                                            subtitle:[station valueForKey:@"Address"]
-                                                            location:coordinate];
+    BMPAnnotation * annot;
+    for (NSDictionary * station in parkings) {
+        annot = [[BMPAnnotation alloc] initWithDict:station];
+        
         [_bikesMap addAnnotation:annot];
     }
 }
@@ -164,6 +161,30 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 }
 
 #pragma mark Map methods
+
+//-(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
+//    if ([[annotation title] isEqualToString:@"Current Location"]) {
+//        return nil;
+//    }
+//    
+//    MKAnnotationView *annView = [[MKAnnotationView alloc ] initWithAnnotation:annotation reuseIdentifier:@"currentloc"];
+//    
+////    if ([[annotation title] isEqualToString:@"McDonald's"])
+////        annView.image = [ UIImage imageNamed:@"mcdonalds.png" ];
+////    else if ([[annotation title] isEqualToString:@"Apple store"])
+////        annView.image = [ UIImage imageNamed:@"applestore.png" ];
+////    else
+////        annView.image = [ UIImage imageNamed:@"marker.png" ];
+////    UIButton *infoButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+////    [infoButton addTarget:self action:@selector(showDetailsView)
+////         forControlEvents:UIControlEventTouchUpInside];
+////    annView.rightCalloutAccessoryView = infoButton;
+////    annView set
+//    annView.canShowCallout = YES;
+//    annView.userInteractionEnabled = YES;
+//    annView.image = [UIImage imageNamed:@"station icon 18"];
+//    return annView;
+//}
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
     if (DEBUGGING) { NSLog(@"did update location map"); } //this one works
