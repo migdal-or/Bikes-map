@@ -5,6 +5,10 @@
 //  Created by Dmitry A. Zvorykin on 10/05/2017.
 //  Copyright © 2017 Dmitry A. Zvorykin. All rights reserved.
 //
+// TODO:
+// 1. move stations load and store service to model
+// 2. table view
+// 3. distance to each station and search of nearest
 
 #import "AppDelegate.h"
 #import "BMPStationsMapView.h"
@@ -26,9 +30,7 @@
     UIWindow *window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     
     BMPStationsMapView * stationsMapView = [BMPStationsMapView new];
-    //    stationsMapView.tabBarItem = [UITabBarItem new];
     stationsMapView.title = @"stations map";
-    //    stationsMapView
     
     BMPStationsTableView * tableView = [BMPStationsTableView new];
     tableView.title = @"stations table";

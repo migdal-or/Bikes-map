@@ -6,22 +6,14 @@
 //  Copyright © 2017 Dmitry A. Zvorykin. All rights reserved.
 //
 
-// TODO:
-// 1. move stations load and store service to model
-// 2. table view
-// 3. distance to each station and search of nearest
-
 #import "BMPStationsMapView.h"
 #import <MapKit/MapKit.h>
 #import "BMPAnnotation.h"
+#import "BMPLoadStations.h"
 //#import <mapkit/MKGeometry.h>
 
 // static const
 static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
-
-#define LOCAL_MODE YES // just to skip all this iTunes bullshit and load data from local file )
-#define STORE_FILE YES // save itunes data if non-local mode call?
-#define ARCHIVE_FILE_PATH @"/Users/admin/Desktop/bicycles.data"
 
 @interface BMPStationsMapView ()
 
@@ -94,46 +86,52 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     
     return;
     
-    // start getting stations from api or local file
-    __block NSDictionary * parkings;
-    NSData *data;
     
-    if (LOCAL_MODE) {
-        data = [[NSData alloc] initWithContentsOfFile:ARCHIVE_FILE_PATH];
-        parkings = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-        NSLog(@"init stations from file done");
-        [self annotateParkings: [parkings objectForKey:@"Items"]];
-    } else {
-        NSMutableURLRequest *request = [NSMutableURLRequest
-                                        requestWithURL:[NSURL URLWithString:@"http://apivelobike.velobike.ru/ride/parkings"]
-                                           cachePolicy:NSURLRequestUseProtocolCachePolicy
-                                      timeoutInterval:10.0];
-        [request setHTTPMethod:@"GET"];
-        
-        NSURLSession *session = [NSURLSession sharedSession];
-        NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request
-                                                    completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                                                        if (error) {
-                                                            NSLog(@"%@", error);
-                                                        } else {
-//                                                            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
-//                                                            NSLog(@"%@", httpResponse);
-                                                            parkings = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
-                                                            if (STORE_FILE) {
-                                                                if ([data writeToFile:ARCHIVE_FILE_PATH atomically:YES]) {
-                                                                    NSLog(@"archiving ok");
-                                                                } else {
-                                                                    NSLog(@"archiving failed");
-                                                                };
-                                                            } else {
-                                                                NSLog(@"not archiving file to local because of defines setup");
-                                                            }
-                                                            [self annotateParkings: [parkings objectForKey:@"Items"]];
-                                                        }
-                                                        
-                                                    }];
-        [dataTask resume];
-    }
+//    // start getting stations from api or local file
+    NSDictionary * parkings;
+    parkings = [BMPLoadStations loadStations];
+    
+    NSLog(@"init stations from file done");
+    [self annotateParkings: [parkings objectForKey:@"Items"]];
+
+//    NSData *data;
+//    
+//    if (LOCAL_MODE) {
+//        data = [[NSData alloc] initWithContentsOfFile:ARCHIVE_FILE_PATH];
+//        parkings = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+//        NSLog(@"init stations from file done");
+//        [self annotateParkings: [parkings objectForKey:@"Items"]];
+//    } else {
+//        NSMutableURLRequest *request = [NSMutableURLRequest
+//                                        requestWithURL:[NSURL URLWithString:@"http://apivelobike.velobike.ru/ride/parkings"]
+//                                           cachePolicy:NSURLRequestUseProtocolCachePolicy
+//                                      timeoutInterval:10.0];
+//        [request setHTTPMethod:@"GET"];
+//        
+//        NSURLSession *session = [NSURLSession sharedSession];
+//        NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request
+//                                                    completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+//                                                        if (error) {
+//                                                            NSLog(@"%@", error);
+//                                                        } else {
+////                                                            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+////                                                            NSLog(@"%@", httpResponse);
+//                                                            parkings = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+//                                                            if (STORE_FILE) {
+//                                                                if ([data writeToFile:ARCHIVE_FILE_PATH atomically:YES]) {
+//                                                                    NSLog(@"archiving ok");
+//                                                                } else {
+//                                                                    NSLog(@"archiving failed");
+//                                                                };
+//                                                            } else {
+//                                                                NSLog(@"not archiving file to local because of defines setup");
+//                                                            }
+//                                                            [self annotateParkings: [parkings objectForKey:@"Items"]];
+//                                                        }
+//                                                        
+//                                                    }];
+//        [dataTask resume];
+//    }
 }
 
 - (void)annotateParkings: (NSDictionary *) parkings {
