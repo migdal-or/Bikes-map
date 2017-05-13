@@ -10,7 +10,6 @@
 #import <MapKit/MapKit.h>
 #import "BMPAnnotation.h"
 #import "BMPLoadStations.h"
-//#import <mapkit/MKGeometry.h>
 
 // static const
 static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
@@ -64,8 +63,9 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     [self.bikesMap setRegion:region animated:YES];
 
     UIButton *zoomPlusButton = [UIButton buttonWithType: UIButtonTypeCustom];
-    [zoomPlusButton setImage:[UIImage imageNamed:@"zoomplus"] forState: UIControlStateNormal];
-    zoomPlusButton.frame = CGRectMake(self.view.bounds.size.width-50, 100, 41, 39);
+    UIImage *buttonImage = [UIImage imageNamed:@"zoomplus"]; //TODO 5
+    [zoomPlusButton setImage:buttonImage forState: UIControlStateNormal];
+    zoomPlusButton.frame = CGRectMake(self.view.bounds.size.width-50, 100, buttonImage.size.width, buttonImage.size.height);
     zoomPlusButton.tag = BMPzoomPlus;
     [zoomPlusButton addTarget:self action:@selector(zoomBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     [_bikesMap addSubview:zoomPlusButton];
@@ -84,14 +84,11 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     [zoomMinusButton addTarget:self action:@selector(zoomBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     [_bikesMap addSubview:zoomMinusButton];
     
-    return;
-    
-    
 //    // start getting stations from api or local file
     NSDictionary * parkings;
     parkings = [BMPLoadStations loadStations];
     
-    NSLog(@"init stations from file done");
+//    NSLog(@"init stations");
     [self annotateParkings: [parkings objectForKey:@"Items"]];
 
 //    NSData *data;

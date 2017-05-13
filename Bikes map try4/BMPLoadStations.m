@@ -13,14 +13,17 @@
 
 @interface BMPLoadStations ()
 
-@property (nonatomic, strong) NSArray* stations;
+@property (nonatomic, strong) NSDictionary* stations;
 
 @end
 
 @implementation BMPLoadStations
 
 +(NSDictionary *)loadStations {
-    
+    // TODO 1. Save stations object and return cached copy between calls if the object has already been retrieved
+//    if (nil == _stations) {
+//        
+//    }
     // start getting stations from api or local file
     __block NSDictionary * parkings;
     NSData *data;
@@ -41,8 +44,6 @@
                                                         if (error) {
                                                             NSLog(@"%@", error);
                                                         } else {
-                                                            //                                                            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
-                                                            //                                                            NSLog(@"%@", httpResponse);
                                                             parkings = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
                                                             if (STORE_FILE) {
                                                                 if ([data writeToFile:ARCHIVE_FILE_PATH atomically:YES]) {

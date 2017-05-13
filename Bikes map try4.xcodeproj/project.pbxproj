@@ -149,8 +149,8 @@
 		84EE21B31EC373810020EF13 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				04E448D81EC6F54700E9D7BB /* loadStations */,
 				84EE21C31EC3E6100020EF13 /* Annotation */,
+				04E448D81EC6F54700E9D7BB /* loadStations */,
 			);
 			name = Model;
 			sourceTree = "<group>";

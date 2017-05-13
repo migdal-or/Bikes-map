@@ -9,6 +9,8 @@
 // 1. move stations load and store service to model
 // 2. table view
 // 3. distance to each station and search of nearest
+// 4. DONE zoom buttons
+// 5. position zoom buttons
 
 #import "AppDelegate.h"
 #import "BMPStationsMapView.h"
