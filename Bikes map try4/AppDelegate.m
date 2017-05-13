@@ -6,11 +6,18 @@
 //  Copyright © 2017 Dmitry A. Zvorykin. All rights reserved.
 //
 // TODO:
-// 1. DONE move stations load and store service to model
 // 2. table view
 // 3. distance to each station and search of nearest
-// 4. DONE zoom buttons
 // 5. position zoom buttons
+// 6. Implement "loading" status
+// 7. implement different icons:
+//    1) just different than annotation default,
+//    2) different for electric and mechanic bicycles,
+//    3) vary from station load
+// 8.
+//
+// 1. DONE move stations load and store service to model
+// 4. DONE zoom buttons
 
 #import "AppDelegate.h"
 #import "BMPStationsMapView.h"
