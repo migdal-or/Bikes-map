@@ -8,7 +8,6 @@
 // TODO:
 // 2. table view
 // 3. distance to each station and search of nearest
-// 5. position zoom buttons
 // 6. Implement "loading" status
 // 7. implement different icons:
 //    1) just different than annotation default,
@@ -18,6 +17,7 @@
 //
 // 1. DONE move stations load and store service to model
 // 4. DONE zoom buttons
+// 5. DONE position zoom buttons
 
 #import "AppDelegate.h"
 #import "BMPStationsMapView.h"
