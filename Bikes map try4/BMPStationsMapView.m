@@ -11,14 +11,14 @@
 #import "BMPAnnotation.h"
 #import "BMPLoadStations.h"
 
-// static const
+#define DEBUGGING YES
+
 static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 @interface BMPStationsMapView ()
 
 @property (nonatomic, strong) MKMapView *bikesMap;
-@property (nonatomic, strong) UILabel *youGotTooFarLabel;
-@property (nonatomic, assign) CGFloat tabBarHeight;
+@property (nonatomic, strong) UILabel *labelOnTopOfMap;
 @property (nonatomic, assign) BOOL locationWasObtained;
 
 @end
@@ -46,18 +46,6 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:verticalConstraint options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[mapView]|"    options:0 metrics:nil views:views]];
     
-    // add a label to show if you are too far
-    _youGotTooFarLabel = [UILabel new];
-    _youGotTooFarLabel.font = [UIFont boldSystemFontOfSize: 18.0];
-    _youGotTooFarLabel.text = @"You got too far from Moscow,\nplease fly back :)";
-    _youGotTooFarLabel.textAlignment = NSTextAlignmentCenter;
-    _youGotTooFarLabel.textColor = [UIColor redColor];
-    _youGotTooFarLabel.hidden = YES;
-    _youGotTooFarLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    _youGotTooFarLabel.numberOfLines = 0;
-    _youGotTooFarLabel.frame = CGRectMake(0, (self.view.bounds.size.height-TOOFAR_LABEL_HEIGHT)/2, self.view.bounds.size.width, TOOFAR_LABEL_HEIGHT);
-    [self.view addSubview:_youGotTooFarLabel];
-
     // move view to moscow
     MKCoordinateRegion region = {{55.755786, 37.617633}, MKCoordinateSpanMake(0.40, 0.51)};
     [self.bikesMap setRegion:region animated:YES];
@@ -89,17 +77,35 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     [zoomMinusButton addTarget:self action:@selector(zoomBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     [_bikesMap addSubview:zoomMinusButton];
     
+    // add a label to show misc information
+    _labelOnTopOfMap = [UILabel new];
+    _labelOnTopOfMap.font = [UIFont boldSystemFontOfSize: 18.0];
+    _labelOnTopOfMap.textAlignment = NSTextAlignmentCenter;
+    _labelOnTopOfMap.hidden = YES;
+    _labelOnTopOfMap.lineBreakMode = NSLineBreakByWordWrapping;
+    _labelOnTopOfMap.numberOfLines = 0;
+    _labelOnTopOfMap.frame = CGRectMake(0, (self.view.bounds.size.height-TOOFAR_LABEL_HEIGHT)/2, self.view.bounds.size.width, TOOFAR_LABEL_HEIGHT);
+    [self.view addSubview:_labelOnTopOfMap];
+    _labelOnTopOfMap.text = @"Loading stations,\nplease wait";
+    _labelOnTopOfMap.textColor = [UIColor blackColor];
+
+
 //    // start getting stations from api or local file
     NSDictionary * parkings;
+    _labelOnTopOfMap.hidden = NO;
     parkings = [BMPLoadStations loadStations];
-    
+    _labelOnTopOfMap.hidden = YES;
+
 //    NSLog(@"init stations");
     [self annotateParkings: [parkings objectForKey:@"Items"]];
+
+    _labelOnTopOfMap.text = @"You got too far from Moscow,\nplease fly back :)";
+    _labelOnTopOfMap.textColor = [UIColor redColor];
 
 }
 
 - (void)annotateParkings: (NSDictionary *) parkings {
-    NSLog(@"annotating %d stations", [parkings count]);
+    if (DEBUGGING) { NSLog(@"annotating %d stations", [parkings count]); }
     CLLocationCoordinate2D coordinate;
     for (NSArray* station in parkings) {
         coordinate.latitude  = [[[station valueForKey:@"Position"] valueForKey:@"Lat"] doubleValue];
@@ -152,11 +158,6 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     }
 }
 
-- (void)tellCoords: (MKUserLocation *)userLocation {
-    NSLog(@"%f %f", _bikesMap.userLocation.location.coordinate.latitude, _bikesMap.userLocation.location.coordinate.longitude);
-    NSLog(@"%f, %f", [_bikesMap region].span.latitudeDelta, [_bikesMap region].span.longitudeDelta);
-}
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -165,7 +166,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 #pragma mark Map methods
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
-//    NSLog(@"did update location map"); //this one works
+    if (DEBUGGING) { NSLog(@"did update location map"); } //this one works
     _locationWasObtained = YES;
     
     
@@ -191,10 +192,10 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     
     CLLocationDistance distance = [MoscowLocation distanceFromLocation:myLocation];
     
-    NSLog(@"%@", [NSString stringWithFormat:@"Distance to point %4.0f m.", distance]);
+//    NSLog(@"%@", [NSString stringWithFormat:@"Distance to point %4.0f m.", distance]);
     if (distance > 20000) {
-        NSLog(@"you got too far from moscow");
-        _youGotTooFarLabel.hidden = NO;
+//        NSLog(@"you got too far from moscow");
+        _labelOnTopOfMap.hidden = NO;
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"location error" message:@"You got too far from Moscow, please fly back :)" preferredStyle:UIAlertControllerStyleActionSheet];
         UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
                                                               handler:^(UIAlertAction * action) {}];
@@ -202,16 +203,15 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
         [alert addAction:defaultAction];
         [self presentViewController:alert animated:YES completion:nil];
     } else {
-        _youGotTooFarLabel.hidden = YES;
-
+        _labelOnTopOfMap.hidden = YES;
     }
 }
 
--(void)mapViewWillStartLoadingMap:(MKMapView *)mapView {
-    NSLog(@"start load map");
-}
-- (void)mapViewWillStartLocatingUser:(MKMapView *)mapView {
-    NSLog(@"will start locate");
-}
+//-(void)mapViewWillStartLoadingMap:(MKMapView *)mapView {
+//    NSLog(@"start load map");
+//}
+//- (void)mapViewWillStartLocatingUser:(MKMapView *)mapView {
+//    NSLog(@"will start locate");
+//}
 
 @end
