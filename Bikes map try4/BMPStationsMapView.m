@@ -24,7 +24,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 @property (nonatomic, strong) UILabel *labelOnTopOfMap;
 @property (nonatomic, assign) BOOL locationWasObtained;
 @property (nonatomic, strong) UIImage* bikeIcon;
-@property (nonatomic, strong) NSDictionary * bikeIcons;
+@property (nonatomic, strong) NSMutableDictionary * bikeIcons;
 
 @end
 
@@ -235,12 +235,27 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     
     annView.canShowCallout = YES;
     annView.userInteractionEnabled = YES;
-    UIImage * circleIcon = [BMPStationsMapView Circle:18.0f and:[UIColor redColor]];
-    annView.image = [BMPStationsMapView overlayImage:_bikeIcon inImage:circleIcon atPoint:CGPointMake(0, 3)];
+    NSLog(@"%@", lbl.text);
+    // .+(Механическая|Электрическая)\.\\n(\d+).+(\d+)
+    annView.image = [self buildStationIcon:NO and:0.5f];
     return annView;
 }
 
 #pragma mark - graphics methods
+
+-(UIImage *)buildStationIcon: (BOOL) electric and: (CGFloat) load {
+    UIImage * whatWeBuild;
+    NSString * key = [NSString stringWithFormat:@"%@ %f", electric?@"e":@"m", load];
+    if (nil==[_bikeIcons objectForKey:key]) {
+        
+        UIImage * circleIcon = [BMPStationsMapView Circle:18.0f and:[UIColor colorWithHue: load saturation:1.0 brightness:1.0 alpha:1.0]];
+        whatWeBuild = [BMPStationsMapView overlayImage:_bikeIcon inImage:circleIcon atPoint:CGPointMake(0, 3)];
+        return whatWeBuild;
+        
+    } else {
+        return [_bikeIcons objectForKey:key];
+    };
+}
 
 +(UIImage *)overlayImage:(UIImage*) fgImage inImage:(UIImage*) bgImage atPoint:(CGPoint) point {
     UIGraphicsBeginImageContextWithOptions(bgImage.size, FALSE, 0.0);
