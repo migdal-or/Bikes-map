@@ -17,5 +17,7 @@ typedef NS_ENUM(NSUInteger, BMPzoomButtonValues) {
     BMPzoomMinus,
 };
 
++(UIImage *)changeWhiteColorTransparent: (UIImage *)image;
+
 @end
 

@@ -12,6 +12,8 @@
 #import "BMPLoadStations.h"
 #import <UIKit/UIKit.h>
 
+#import <QuartzCore/QuartzCore.h>
+
 #define DEBUGGING YES
 
 static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
@@ -21,10 +23,39 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 @property (nonatomic, strong) MKMapView *bikesMap;
 @property (nonatomic, strong) UILabel *labelOnTopOfMap;
 @property (nonatomic, assign) BOOL locationWasObtained;
+@property (nonatomic, strong) UIImage* bikeIcon;
 
 @end
 
 @implementation BMPStationsMapView
+
+-(instancetype)init {
+    self = [super init];
+    _bikeIcon = [[UIImage imageNamed:@"station icon 18"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    _bikeIcon = [BMPStationsMapView changeWhiteColorTransparent: _bikeIcon];
+    return self;
+}
+
++(UIImage *)changeWhiteColorTransparent: (UIImage *)image
+{
+    CGImageRef rawImageRef=image.CGImage;
+    
+    const float colorMasking[6] = {222, 255, 222, 255, 222, 255};
+    
+    UIGraphicsBeginImageContext(image.size);
+    CGImageRef maskedImageRef=CGImageCreateWithMaskingColors(rawImageRef, colorMasking);
+    {
+        //if in iphone
+        CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0.0, image.size.height);
+        CGContextScaleCTM(UIGraphicsGetCurrentContext(), 1.0, -1.0);
+    }
+    
+    CGContextDrawImage(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, image.size.width, image.size.height), maskedImageRef);
+    UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
+    CGImageRelease(maskedImageRef);
+    UIGraphicsEndImageContext();
+    return result;
+}
 
 #pragma mark System methods
 
@@ -192,10 +223,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     
     annView.canShowCallout = YES;
     annView.userInteractionEnabled = YES;
-    UIImage * bicycleIcon = [[UIImage imageNamed:@"station icon 18"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    annView.image = bicycleIcon;
-    [annView setBackgroundColor:[UIColor redColor]];
-
+    annView.image = _bikeIcon;
     return annView;
 }
 
