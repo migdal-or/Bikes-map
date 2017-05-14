@@ -10,8 +10,6 @@
 
 @interface BMPAnnotation : NSObject<MKAnnotation>
 
-//-(id)initWithTitle:(NSString*)newTitle subtitle:(NSString *)subTitle location:(CLLocationCoordinate2D)location;
-//-(MKAnnotationView *)annotationView;
 -(id)initWithDict:(NSDictionary *)parameters;
 
 @end

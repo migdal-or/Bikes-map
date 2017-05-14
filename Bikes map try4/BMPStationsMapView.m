@@ -10,6 +10,7 @@
 #import <MapKit/MapKit.h>
 #import "BMPAnnotation.h"
 #import "BMPLoadStations.h"
+#import <UIKit/UIKit.h>
 
 #define DEBUGGING YES
 
@@ -162,29 +163,41 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 #pragma mark Map methods
 
-//-(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
-//    if ([[annotation title] isEqualToString:@"Current Location"]) {
-//        return nil;
-//    }
-//    
-//    MKAnnotationView *annView = [[MKAnnotationView alloc ] initWithAnnotation:annotation reuseIdentifier:@"currentloc"];
-//    
-////    if ([[annotation title] isEqualToString:@"McDonald's"])
-////        annView.image = [ UIImage imageNamed:@"mcdonalds.png" ];
-////    else if ([[annotation title] isEqualToString:@"Apple store"])
-////        annView.image = [ UIImage imageNamed:@"applestore.png" ];
-////    else
-////        annView.image = [ UIImage imageNamed:@"marker.png" ];
-////    UIButton *infoButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-////    [infoButton addTarget:self action:@selector(showDetailsView)
-////         forControlEvents:UIControlEventTouchUpInside];
-////    annView.rightCalloutAccessoryView = infoButton;
-////    annView set
-//    annView.canShowCallout = YES;
-//    annView.userInteractionEnabled = YES;
-//    annView.image = [UIImage imageNamed:@"station icon 18"];
-//    return annView;
-//}
+-(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
+    if ([annotation isKindOfClass:[MKUserLocation class]]) {    // no special annotation for @"My Location"]
+        return nil; }
+    
+    MKAnnotationView *annView = [[MKAnnotationView alloc ] initWithAnnotation:annotation reuseIdentifier:@"bike-station"];
+    
+//    if ([[annotation title] isEqualToString:@"McDonald's"])
+//        annView.image = [ UIImage imageNamed:@"mcdonalds.png" ];
+//    else if ([[annotation title] isEqualToString:@"Apple store"])
+//        annView.image = [ UIImage imageNamed:@"applestore.png" ];
+//    else
+//        annView.image = [ UIImage imageNamed:@"marker.png" ];
+//    UIButton *infoButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+//    [infoButton addTarget:self action:@selector(showDetailsView)
+//         forControlEvents:UIControlEventTouchUpInside];
+//    annView.rightCalloutAccessoryView = infoButton;
+//    annView set
+    UILabel *lbl = [[UILabel alloc] init];
+    lbl.text = annotation.subtitle;
+    lbl.numberOfLines = 0;
+    [lbl sizeToFit];
+    annView.detailCalloutAccessoryView = lbl;
+    
+    //Following lets the callout still work if you tap on the label...
+    annView.canShowCallout = YES;
+    annView.frame = lbl.frame;
+    
+    annView.canShowCallout = YES;
+    annView.userInteractionEnabled = YES;
+    UIImage * bicycleIcon = [[UIImage imageNamed:@"station icon 18"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    annView.image = bicycleIcon;
+    [annView setBackgroundColor:[UIColor redColor]];
+
+    return annView;
+}
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
     if (DEBUGGING) { NSLog(@"did update location map"); } //this one works

@@ -19,43 +19,36 @@
 
 @implementation BMPAnnotation
 
-//-(id)initWithTitle:(NSString *)newTitle subtitle:(NSString *)subTitle location:(CLLocationCoordinate2D)location {
-//    if (self) {
-//        _title = newTitle;
-//        _coordinate = location;
-//        _subtitle = subTitle;
-//    }
-//    
-//    return self;
-//}
-
 -(id)initWithDict:(NSDictionary *)parameters {
     if (self) {
-        NSString * is_electric;
+        if ([@"true" isEqualToString:[parameters valueForKey:@"IsLocked"]]) return nil;
+        
+        NSString *is_electric, *stationNumber, *temp;
 
         CLLocationCoordinate2D coordinate;
         coordinate.latitude  = [[[parameters valueForKey:@"Position"] valueForKey:@"Lat"] doubleValue];
         coordinate.longitude = [[[parameters valueForKey:@"Position"] valueForKey:@"Lon"] doubleValue];
-        _title = [parameters valueForKey:@"Id"];
+        
+        stationNumber = [parameters valueForKey:@"Id"]; //proven best techique to get rid of leading 0s
+        // on http://stackoverflow.com/questions/13354933/nsstring-remove-leading-0s-so-00001234-becomes-1234
+        for (NSUInteger i = 0; i < [stationNumber length]; i++) {
+            if ([stationNumber characterAtIndex:i] != '0') { temp = [stationNumber substringFromIndex:i]; break; } }
+        stationNumber = temp;
+        _title = [NSString stringWithFormat:@"Станция №%@", stationNumber];
+        
         _coordinate = coordinate;
-        is_electric = ((0==[parameters valueForKey:@"TotalElectricPlaces"])?@"Механические":@"Электрические");
+        is_electric = ((0==[parameters valueForKey:@"TotalElectricPlaces"])?@"Электрическая":@"Механическая");
 
         unsigned int total_places = [[parameters valueForKey:@"TotalPlaces"] doubleValue];
         unsigned int free_places = [[parameters valueForKey:@"FreePlaces"] doubleValue];
         NSString * address = [parameters valueForKey:@"Address"];
-        _subtitle = [NSString stringWithFormat:@"%@\n%@\nВсего мест: %u\nСвободных мест:%u", address, is_electric, total_places, free_places];
+        _subtitle = [NSString stringWithFormat:@"%@. %@.\n%u мест. Свободных %u", address, is_electric, total_places, free_places];
+        
+        temp = [NSString stringWithFormat:@"^(%03d - )*", [stationNumber integerValue]];
+        NSRange range = [_subtitle rangeOfString:temp options:NSRegularExpressionSearch];
+        _subtitle = [_subtitle stringByReplacingCharactersInRange:range withString:@""];
     }
     
     return self;
 }
-
-
-//-(MKAnnotationView *)annotationView {
-//    MKAnnotationView *annotationView = [[MKAnnotationView alloc] initWithAnnotation:self reuseIdentifier:@"bike-station"];
-//    annotationView.enabled = YES;
-//    annotationView.canShowCallout = YES;
-//    annotationView.image = [UIImage imageNamed:@"station icon 18"];
-//    return annotationView;
-//}
-
 @end
