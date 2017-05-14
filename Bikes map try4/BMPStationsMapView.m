@@ -24,6 +24,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 @property (nonatomic, strong) UILabel *labelOnTopOfMap;
 @property (nonatomic, assign) BOOL locationWasObtained;
 @property (nonatomic, strong) UIImage* bikeIcon;
+@property (nonatomic, strong) NSDictionary * bikeIcons;
 
 @end
 
@@ -31,31 +32,11 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 -(instancetype)init {
     self = [super init];
-    _bikeIcon = [[UIImage imageNamed:@"station icon 18"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    _bikeIcon = [BMPStationsMapView changeWhiteColorTransparent: _bikeIcon];
+//    _bikeIcon = [[UIImage imageNamed:@"station icon 30"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    _bikeIcon = [UIImage imageNamed:@"station icon 18 black"]; //[BMPStationsMapView changeWhiteColorTransparent: _bikeIcon];
     return self;
 }
 
-+(UIImage *)changeWhiteColorTransparent: (UIImage *)image
-{
-    CGImageRef rawImageRef=image.CGImage;
-    
-    const float colorMasking[6] = {222, 255, 222, 255, 222, 255};
-    
-    UIGraphicsBeginImageContext(image.size);
-    CGImageRef maskedImageRef=CGImageCreateWithMaskingColors(rawImageRef, colorMasking);
-    {
-        //if in iphone
-        CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0.0, image.size.height);
-        CGContextScaleCTM(UIGraphicsGetCurrentContext(), 1.0, -1.0);
-    }
-    
-    CGContextDrawImage(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, image.size.width, image.size.height), maskedImageRef);
-    UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
-    CGImageRelease(maskedImageRef);
-    UIGraphicsEndImageContext();
-    return result;
-}
 
 #pragma mark System methods
 
@@ -194,39 +175,6 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 #pragma mark Map methods
 
--(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
-    if ([annotation isKindOfClass:[MKUserLocation class]]) {    // no special annotation for @"My Location"]
-        return nil; }
-    
-    MKAnnotationView *annView = [[MKAnnotationView alloc ] initWithAnnotation:annotation reuseIdentifier:@"bike-station"];
-    
-//    if ([[annotation title] isEqualToString:@"McDonald's"])
-//        annView.image = [ UIImage imageNamed:@"mcdonalds.png" ];
-//    else if ([[annotation title] isEqualToString:@"Apple store"])
-//        annView.image = [ UIImage imageNamed:@"applestore.png" ];
-//    else
-//        annView.image = [ UIImage imageNamed:@"marker.png" ];
-//    UIButton *infoButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-//    [infoButton addTarget:self action:@selector(showDetailsView)
-//         forControlEvents:UIControlEventTouchUpInside];
-//    annView.rightCalloutAccessoryView = infoButton;
-//    annView set
-    UILabel *lbl = [[UILabel alloc] init];
-    lbl.text = annotation.subtitle;
-    lbl.numberOfLines = 0;
-    [lbl sizeToFit];
-    annView.detailCalloutAccessoryView = lbl;
-    
-    //Following lets the callout still work if you tap on the label...
-    annView.canShowCallout = YES;
-    annView.frame = lbl.frame;
-    
-    annView.canShowCallout = YES;
-    annView.userInteractionEnabled = YES;
-    annView.image = _bikeIcon;
-    return annView;
-}
-
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
     if (DEBUGGING) { NSLog(@"did update location map"); } //this one works
     _locationWasObtained = YES;
@@ -269,11 +217,79 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     }
 }
 
-//-(void)mapViewWillStartLoadingMap:(MKMapView *)mapView {
-//    NSLog(@"start load map");
-//}
-//- (void)mapViewWillStartLocatingUser:(MKMapView *)mapView {
-//    NSLog(@"will start locate");
-//}
+-(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
+    if ([annotation isKindOfClass:[MKUserLocation class]]) {    // no special annotation for @"My Location"]
+        return nil; }
+    
+    MKAnnotationView *annView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"bike-station"];
+    
+    UILabel *lbl = [[UILabel alloc] init];
+    lbl.text = annotation.subtitle;
+    lbl.numberOfLines = 0;
+    [lbl sizeToFit];
+    annView.detailCalloutAccessoryView = lbl;
+    
+    //Following lets the callout still work if you tap on the label...
+    annView.canShowCallout = YES;
+    annView.frame = lbl.frame;
+    
+    annView.canShowCallout = YES;
+    annView.userInteractionEnabled = YES;
+    UIImage * circleIcon = [BMPStationsMapView Circle:18.0f and:[UIColor redColor]];
+    annView.image = [BMPStationsMapView overlayImage:_bikeIcon inImage:circleIcon atPoint:CGPointMake(0, 3)];
+    return annView;
+}
+
+#pragma mark - graphics methods
+
++(UIImage *)overlayImage:(UIImage*) fgImage inImage:(UIImage*) bgImage atPoint:(CGPoint) point {
+    UIGraphicsBeginImageContextWithOptions(bgImage.size, FALSE, 0.0);
+    [bgImage drawInRect:CGRectMake( 0, 0, bgImage.size.width, bgImage.size.height)];
+    [fgImage drawInRect:CGRectMake( point.x, point.y, fgImage.size.width, fgImage.size.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return newImage;
+}
+
++(UIImage *)Circle: (CGFloat) radius and: (UIColor *) color {
+    static UIImage *Circle = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        UIGraphicsBeginImageContextWithOptions(CGSizeMake(radius, radius), NO, 0.0f);
+        CGContextRef ctx = UIGraphicsGetCurrentContext();
+        CGContextSaveGState(ctx);
+        
+        CGRect rect = CGRectMake(0, 0, radius, radius);
+        CGContextSetFillColorWithColor(ctx, color.CGColor);
+        CGContextFillEllipseInRect(ctx, rect);
+        
+        CGContextRestoreGState(ctx);
+        Circle = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+    });
+    return Circle;
+}
+
++(UIImage *)changeWhiteColorTransparent: (UIImage *)image
+{
+    CGImageRef rawImageRef=image.CGImage;
+    const float colorMasking[6] = {222, 255, 222, 255, 222, 255};
+    
+    UIGraphicsBeginImageContext(image.size);
+    CGImageRef maskedImageRef=CGImageCreateWithMaskingColors(rawImageRef, colorMasking);
+    {
+        //if in iphone
+        CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0.0, image.size.height);
+        CGContextScaleCTM(UIGraphicsGetCurrentContext(), 1.0, -1.0);
+    }
+    
+    CGContextDrawImage(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, image.size.width, image.size.height), maskedImageRef);
+    UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
+    CGImageRelease(maskedImageRef);
+    UIGraphicsEndImageContext();
+    return result;
+}
 
 @end

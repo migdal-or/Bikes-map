@@ -18,6 +18,8 @@ typedef NS_ENUM(NSUInteger, BMPzoomButtonValues) {
 };
 
 +(UIImage *)changeWhiteColorTransparent: (UIImage *)image;
++(UIImage *)Circle: (CGFloat) radius and: (UIColor *) color;
++(UIImage *)overlayImage:(UIImage*) fgImage inImage:(UIImage*) bgImage atPoint:(CGPoint) point;
 
 @end
 
