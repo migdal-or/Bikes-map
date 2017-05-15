@@ -239,7 +239,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     
     annView.canShowCallout = YES;
     annView.userInteractionEnabled = YES;
-    NSLog(@"%@", lbl.text);
+//    NSLog(@"%@", lbl.text);
     // .+(Механическая|Электрическая)\.\\n(\d+).+(\d+)
     // .+(Механическая).+
 
@@ -247,14 +247,14 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     
     NSArray *results=[_aRegx matchesInString:lbl.text options:0 range:NSMakeRange(0, lbl.text.length)];
     NSTextCheckingResult *match = results[0];
-    BOOL is_electric = ([[lbl.text substringWithRange:[match rangeAtIndex:1]] isEqualToString:@"Электрическая"]) ? YES : NO;
-    NSString * totalPlaces = [lbl.text substringWithRange:[match rangeAtIndex:2]];
-    NSString *  freePlaces = [lbl.text substringWithRange:[match rangeAtIndex:3]];
+    BOOL is_electric   =  ([[lbl.text substringWithRange:[match rangeAtIndex:1]] isEqualToString:@"Электрическая"]) ? YES : NO;
+    NSString *totalPlaces = [lbl.text substringWithRange:[match rangeAtIndex:2]];
+    NSString *freePlaces  = [lbl.text substringWithRange:[match rangeAtIndex:3]];
     
     CGFloat percent = [freePlaces floatValue] / [totalPlaces floatValue];
     
     
-    NSLog(@"1:%hhd 2:%@. 3:%@", is_electric, totalPlaces, freePlaces);
+//    NSLog(@"1:%hhd 2:%@. 3:%@", is_electric, totalPlaces, freePlaces);
     
     annView.image = [self buildStationIcon:is_electric and:percent];
     return annView;
@@ -263,12 +263,13 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 #pragma mark - graphics methods
 
 -(UIImage *)buildStationIcon: (BOOL) electric and: (CGFloat) load {
-    UIImage * whatWeBuild;
-    NSString * key = [NSString stringWithFormat:@"%@ %f", electric?@"e":@"m", load];
+    UIImage *whatWeBuild;
+    NSString *key = [NSString stringWithFormat:@"%@ %f", electric?@"e":@"m", load];
     if (nil==[_bikeIcons objectForKey:key]) {
-        
-        UIImage * circleIcon = [BMPStationsMapView Circle:18.0f and:[UIColor colorWithHue: load saturation:1.0 brightness:1.0 alpha:1.0]];
+        UIColor *thiscolor = [UIColor colorWithHue: load saturation:1.0 brightness:1.0 alpha:1.0];
+        UIImage *circleIcon = [BMPStationsMapView Circle:18.0f and: thiscolor];
         whatWeBuild = [BMPStationsMapView overlayImage:_bikeIcon inImage:circleIcon atPoint:CGPointMake(0, 3)];
+        [_bikeIcons setObject:whatWeBuild forKey:key];
         return whatWeBuild;
         
     } else {
