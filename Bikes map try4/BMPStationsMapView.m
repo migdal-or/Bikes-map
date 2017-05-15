@@ -24,7 +24,8 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 @property (nonatomic, strong) UILabel *labelOnTopOfMap;
 @property (nonatomic, assign) BOOL locationWasObtained;
 @property (nonatomic, strong) UIImage* bikeIcon;
-@property (nonatomic, strong) NSMutableDictionary * bikeIcons;
+@property (nonatomic, strong) NSMutableDictionary *bikeIcons;
+@property (nonatomic, strong) NSRegularExpression *aRegx;
 
 @end
 
@@ -32,8 +33,11 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 -(instancetype)init {
     self = [super init];
-//    _bikeIcon = [[UIImage imageNamed:@"station icon 30"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    _bikeIcon = [UIImage imageNamed:@"station icon 18 black"]; //[BMPStationsMapView changeWhiteColorTransparent: _bikeIcon];
+    _bikeIcon = [UIImage imageNamed:@"station icon 18 black"];
+    
+    NSString *regexStr=@".+(Механическая|Электрическая).\\n([0-9]+) мест. Свободных ([0-9]+)";
+    _aRegx=[NSRegularExpression regularExpressionWithPattern:regexStr options:NSRegularExpressionCaseInsensitive error:nil];
+
     return self;
 }
 
@@ -237,7 +241,22 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     annView.userInteractionEnabled = YES;
     NSLog(@"%@", lbl.text);
     // .+(Механическая|Электрическая)\.\\n(\d+).+(\d+)
-    annView.image = [self buildStationIcon:NO and:0.5f];
+    // .+(Механическая).+
+
+    // @"ул. Селезнёвская, д.29, стр.1. Механическая.\n12 мест. Свободных 9";
+    
+    NSArray *results=[_aRegx matchesInString:lbl.text options:0 range:NSMakeRange(0, lbl.text.length)];
+    NSTextCheckingResult *match = results[0];
+    BOOL is_electric = ([[lbl.text substringWithRange:[match rangeAtIndex:1]] isEqualToString:@"Электрическая"]) ? YES : NO;
+    NSString * totalPlaces = [lbl.text substringWithRange:[match rangeAtIndex:2]];
+    NSString *  freePlaces = [lbl.text substringWithRange:[match rangeAtIndex:3]];
+    
+    CGFloat percent = [freePlaces floatValue] / [totalPlaces floatValue];
+    
+    
+    NSLog(@"1:%hhd 2:%@. 3:%@", is_electric, totalPlaces, freePlaces);
+    
+    annView.image = [self buildStationIcon:is_electric and:percent];
     return annView;
 }
 
