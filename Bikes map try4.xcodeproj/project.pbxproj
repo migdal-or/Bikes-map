@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		04E448DB1EC6F56000E9D7BB /* BMPLoadStations.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E448DA1EC6F56000E9D7BB /* BMPLoadStations.m */; };
+		04E7BB881ECB77B300461F26 /* BMPTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E7BB871ECB77B300461F26 /* BMPTableViewCell.m */; };
 		84EE21961EC3701E0020EF13 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EE21951EC3701E0020EF13 /* main.m */; };
 		84EE21991EC3701E0020EF13 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EE21981EC3701E0020EF13 /* AppDelegate.m */; };
 		84EE219C1EC3701E0020EF13 /* BMPStationsMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EE219B1EC3701E0020EF13 /* BMPStationsMapView.m */; };
@@ -22,6 +23,8 @@
 /* Begin PBXFileReference section */
 		04E448D91EC6F56000E9D7BB /* BMPLoadStations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMPLoadStations.h; sourceTree = "<group>"; };
 		04E448DA1EC6F56000E9D7BB /* BMPLoadStations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMPLoadStations.m; sourceTree = "<group>"; };
+		04E7BB861ECB77B300461F26 /* BMPTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMPTableViewCell.h; sourceTree = "<group>"; };
+		04E7BB871ECB77B300461F26 /* BMPTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMPTableViewCell.m; sourceTree = "<group>"; };
 		84EE21911EC3701E0020EF13 /* Bikes map try4.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bikes map try4.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		84EE21951EC3701E0020EF13 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		84EE21971EC3701E0020EF13 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -59,6 +62,15 @@
 				04E448DA1EC6F56000E9D7BB /* BMPLoadStations.m */,
 			);
 			name = loadStations;
+			sourceTree = "<group>";
+		};
+		04E7BB851ECB778200461F26 /* Table view cell */ = {
+			isa = PBXGroup;
+			children = (
+				04E7BB861ECB77B300461F26 /* BMPTableViewCell.h */,
+				04E7BB871ECB77B300461F26 /* BMPTableViewCell.m */,
+			);
+			name = "Table view cell";
 			sourceTree = "<group>";
 		};
 		84EE21881EC3701D0020EF13 = {
@@ -121,6 +133,7 @@
 		84EE21AF1EC373530020EF13 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				04E7BB851ECB778200461F26 /* Table view cell */,
 				84EE21AE1EC373490020EF13 /* Stations map */,
 				84EE21B21EC3736A0020EF13 /* Stations table view */,
 				84EE21B11EC373640020EF13 /* Rides history */,
@@ -241,6 +254,7 @@
 				04E448DB1EC6F56000E9D7BB /* BMPLoadStations.m in Sources */,
 				84EE21C21EC3E60C0020EF13 /* BMPAnnotation.m in Sources */,
 				84EE21BC1EC376890020EF13 /* BMPStationsTableView.m in Sources */,
+				04E7BB881ECB77B300461F26 /* BMPTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

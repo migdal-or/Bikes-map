@@ -35,26 +35,19 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     self = [super init];
     
     _bikeIcon = [UIImage imageNamed:@"station icon 18 black"];
-    
+    _bikeIcons = [NSMutableDictionary new];
+
     NSString *regexStr=@".+(Механическая|Электрическая).\\n([0-9]+) мест. Свободных ([0-9]+)";
     _aRegx=[NSRegularExpression regularExpressionWithPattern:regexStr options:NSRegularExpressionCaseInsensitive error:nil];
 
     return self;
 }
 
-
 #pragma mark System methods
 
-- (void)viewDidLoad {
-    //+ move code from didload to subs
+-(void)createMapView {
     
-    [super viewDidLoad];
-    _locationWasObtained = NO;
-   
-    CGFloat tabBarHeight = self.tabBarController.tabBar.bounds.size.height; //столько надо отступить снизу чтобы не прятать данные под таббаром
-    
-    _bikeIcons = [NSMutableDictionary new];
-    
+    // create map view
     _bikesMap = [MKMapView new];
     _bikesMap.delegate = self;
     _bikesMap.showsUserLocation = YES;
@@ -64,6 +57,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     // position map view
     _bikesMap.translatesAutoresizingMaskIntoConstraints = NO;
     id views = @{ @"mapView": _bikesMap };
+    CGFloat tabBarHeight = self.tabBarController.tabBar.bounds.size.height; //столько надо отступить снизу чтобы не прятать данные под таббаром
     NSString *verticalConstraint = [[NSString alloc] initWithFormat:@"V:|[mapView]-%d-|", (int)tabBarHeight];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:verticalConstraint options:0 metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[mapView]|"    options:0 metrics:nil views:views]];
@@ -71,7 +65,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     // move view to moscow
     MKCoordinateRegion region = {{55.755786, 37.617633}, MKCoordinateSpanMake(0.40, 0.51)};
     [self.bikesMap setRegion:region animated:YES];
-
+    
     // implement zoom plus, minus, center buttons
     static CGFloat const imageRightOffset = 0.2;   // in button image width X
     static CGFloat const imagesTopOffset = 0.1;   // in screen size height X
@@ -111,6 +105,15 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     _labelOnTopOfMap.text = @"Loading stations,\nplease wait";
     _labelOnTopOfMap.textColor = [UIColor blackColor];
 
+}
+
+- (void)viewDidLoad {
+    //+ move code from didload to subs
+    
+    [super viewDidLoad];
+    _locationWasObtained = NO;
+
+    [self createMapView];
 
 //    // start getting stations from api or local file
     NSDictionary * parkings;
