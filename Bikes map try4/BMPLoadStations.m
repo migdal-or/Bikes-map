@@ -61,7 +61,9 @@ static NSDictionary * parkings;
             [dataTask resume];
             while (nil == local_parkings) { // do never do like this!
                 NSLog(@"wait");
-                usleep(100000); }
+                usleep(100000);
+            //+ переписать на вызов метода делегата в конце
+            }
         }
         parkings = local_parkings;
     }
