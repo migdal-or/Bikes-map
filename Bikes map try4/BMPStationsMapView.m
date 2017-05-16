@@ -298,8 +298,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
         
         CGContextRestoreGState(ctx);
         Circle = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        
+        UIGraphicsEndImageContext();        
     });
     return Circle;
 }
