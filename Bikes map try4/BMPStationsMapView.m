@@ -50,6 +50,8 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
    
     CGFloat tabBarHeight = self.tabBarController.tabBar.bounds.size.height; //столько надо отступить снизу чтобы не прятать данные под таббаром
     
+    _bikeIcons = [NSMutableDictionary new];
+    
     _bikesMap = [MKMapView new];
     _bikesMap.delegate = self;
     _bikesMap.showsUserLocation = YES;
@@ -231,20 +233,17 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     lbl.text = annotation.subtitle;
     lbl.numberOfLines = 0;
     [lbl sizeToFit];
-    annView.detailCalloutAccessoryView = lbl;
+    annView.detailCalloutAccessoryView = lbl;   // our label is set as the view to display for annotation details
     
-    //Following lets the callout still work if you tap on the label...
+    // Following lets the callout still work if you tap on the label...
     annView.canShowCallout = YES;
     annView.frame = lbl.frame;
     
     annView.canShowCallout = YES;
     annView.userInteractionEnabled = YES;
-//    NSLog(@"%@", lbl.text);
-    // .+(Механическая|Электрическая)\.\\n(\d+).+(\d+)
-    // .+(Механическая).+
 
     // @"ул. Селезнёвская, д.29, стр.1. Механическая.\n12 мест. Свободных 9";
-    
+    // we dissect such strings into 3 parts by previously prepared regular expression
     NSArray *results=[_aRegx matchesInString:lbl.text options:0 range:NSMakeRange(0, lbl.text.length)];
     NSTextCheckingResult *match = results[0];
     BOOL is_electric   =  ([[lbl.text substringWithRange:[match rangeAtIndex:1]] isEqualToString:@"Электрическая"]) ? YES : NO;
@@ -253,10 +252,8 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     
     CGFloat percent = [freePlaces floatValue] / [totalPlaces floatValue];
     
-    
-//    NSLog(@"1:%hhd 2:%@. 3:%@", is_electric, totalPlaces, freePlaces);
-    
-    annView.image = [self buildStationIcon:is_electric and:percent];
+    annView.image = [self buildStationIcon:is_electric and:1-percent];
+//    annView.tintColor
     return annView;
 }
 
@@ -265,13 +262,13 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 -(UIImage *)buildStationIcon: (BOOL) electric and: (CGFloat) load {
     UIImage *whatWeBuild;
     NSString *key = [NSString stringWithFormat:@"%@ %f", electric?@"e":@"m", load];
-    if (nil==[_bikeIcons objectForKey:key]) {
+    if (nil==[_bikeIcons objectForKey:key]) {   //caches icons based on their key values like "m 1.0000"
         UIColor *thiscolor = [UIColor colorWithHue: load saturation:1.0 brightness:1.0 alpha:1.0];
+        // insert different circle for electric bike
         UIImage *circleIcon = [BMPStationsMapView Circle:18.0f and: thiscolor];
         whatWeBuild = [BMPStationsMapView overlayImage:_bikeIcon inImage:circleIcon atPoint:CGPointMake(0, 3)];
         [_bikeIcons setObject:whatWeBuild forKey:key];
-        return whatWeBuild;
-        
+        return whatWeBuild; //it returns differently coloured icons but they are not being drawn
     } else {
         return [_bikeIcons objectForKey:key];
     };
@@ -288,8 +285,8 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 }
 
 +(UIImage *)Circle: (CGFloat) radius and: (UIColor *) color {
-    static UIImage *Circle = nil;
-    static dispatch_once_t onceToken;
+    __block UIImage *Circle = nil;
+    dispatch_once_t onceToken = nil;
     dispatch_once(&onceToken, ^{
         UIGraphicsBeginImageContextWithOptions(CGSizeMake(radius, radius), NO, 0.0f);
         CGContextRef ctx = UIGraphicsGetCurrentContext();
@@ -305,26 +302,6 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
         
     });
     return Circle;
-}
-
-+(UIImage *)changeWhiteColorTransparent: (UIImage *)image
-{
-    CGImageRef rawImageRef=image.CGImage;
-    const float colorMasking[6] = {222, 255, 222, 255, 222, 255};
-    
-    UIGraphicsBeginImageContext(image.size);
-    CGImageRef maskedImageRef=CGImageCreateWithMaskingColors(rawImageRef, colorMasking);
-    {
-        //if in iphone
-        CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0.0, image.size.height);
-        CGContextScaleCTM(UIGraphicsGetCurrentContext(), 1.0, -1.0);
-    }
-    
-    CGContextDrawImage(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, image.size.width, image.size.height), maskedImageRef);
-    UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
-    CGImageRelease(maskedImageRef);
-    UIGraphicsEndImageContext();
-    return result;
 }
 
 @end
