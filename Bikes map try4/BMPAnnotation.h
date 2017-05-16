@@ -10,6 +10,8 @@
 
 @interface BMPAnnotation : NSObject<MKAnnotation>
 
--(id)initWithDict:(NSDictionary *)parameters;
+//+ написать документирующий комментарий **/
+-(nullable id)initWithDict:(nonnull NSDictionary *)parameters; //+nullable - nonnull, писать полностью dictionary, писать nsdictionary<nsstring*,nsstring*)*
+//+ из конструкторов не возвращаем id, возвращаем instancetype
 
 @end

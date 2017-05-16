@@ -8,8 +8,9 @@
 
 #import "BMPLoadStations.h"
 #define LOCAL_MODE YES // just to skip all this iTunes bullshit and load data from local file )
-#define STORE_FILE NO // save itunes data if non-local mode call?
-#define ARCHIVE_FILE_PATH @"/Users/admin/Desktop/bicycles.data"
+#define STORE_FILE YES // save itunes data if non-local mode call?
+#define ARCHIVE_FILE_PATH @"/Users/user/Desktop/bicycles.data" //"/Users/admin/Desktop/bicycles.data"
+//+ move defines to static const
 
 @interface BMPLoadStations ()
 

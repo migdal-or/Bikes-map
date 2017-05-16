@@ -9,6 +9,9 @@
 // 2. table view
 // 3. distance to each station and search of nearest
 // 8. different icons for electric and mechanic bicycles,
+// 9. Paint red-yellow-green palette for stations color
+// 10. dequeue map view annotation?
+// 11. mode location manager to ext service
 //
 // 1. DONE move stations load and store service to model
 // 4. DONE zoom buttons
@@ -56,7 +59,7 @@
     vc.viewControllers = @[stationsMapView, tableView, ridesHistory];
     
     UIImage *tabBarImage = [[UIImage imageNamed:@"tabStations-grid"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    UITabBarItem *tabBarItem = [vc.tabBar.items objectAtIndex:1];
+    UITabBarItem *tabBarItem = [vc.tabBar.items objectAtIndex:1]; //items[0]
     [tabBarItem setImage:tabBarImage];
     [tabBarItem setSelectedImage:tabBarImage];
 

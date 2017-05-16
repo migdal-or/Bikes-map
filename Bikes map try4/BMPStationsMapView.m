@@ -33,6 +33,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 -(instancetype)init {
     self = [super init];
+    
     _bikeIcon = [UIImage imageNamed:@"station icon 18 black"];
     
     NSString *regexStr=@".+(Механическая|Электрическая).\\n([0-9]+) мест. Свободных ([0-9]+)";
@@ -45,6 +46,8 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 #pragma mark System methods
 
 - (void)viewDidLoad {
+    //+ move code from didload to subs
+    
     [super viewDidLoad];
     _locationWasObtained = NO;
    
@@ -120,11 +123,11 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
     _labelOnTopOfMap.text = @"You got too far from Moscow,\nplease fly back :)";
     _labelOnTopOfMap.textColor = [UIColor redColor];
-
 }
 
 - (void)annotateParkings: (NSDictionary *) parkings {
-    if (DEBUGGING) { NSLog(@"annotating %d stations", [parkings count]); }
+    if (DEBUG) { NSLog(@"annotating %d stations", [parkings count]); }
+    //dlog
     BMPAnnotation * annot;
     for (NSDictionary * station in parkings) {
         annot = [[BMPAnnotation alloc] initWithDict:station];
@@ -134,6 +137,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 }
 
 - (void)zoomBtnClicked:(UIButton*)sender{
+    if (DEBUGGING) { NSLog(@"%d icons init", [_bikeIcons count]); }
     switch (sender.tag)
     {
         case BMPzoomPlus: {
@@ -224,6 +228,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 }
 
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
+    //dequeue?
     if ([annotation isKindOfClass:[MKUserLocation class]]) {    // no special annotation for @"My Location"]
         return nil; }
     
@@ -261,7 +266,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 -(UIImage *)buildStationIcon: (BOOL) electric and: (CGFloat) load {
     UIImage *whatWeBuild;
-    NSString *key = [NSString stringWithFormat:@"%@ %f", electric?@"e":@"m", load];
+    NSString *key = [NSString stringWithFormat:@"%@ %.02f", electric?@"e":@"m", load];
     if (nil==[_bikeIcons objectForKey:key]) {   //caches icons based on their key values like "m 1.0000"
         UIColor *thiscolor = [UIColor colorWithHue: load saturation:1.0 brightness:1.0 alpha:1.0];
         // insert different circle for electric bike
@@ -286,7 +291,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 +(UIImage *)Circle: (CGFloat) radius and: (UIColor *) color {
     __block UIImage *Circle = nil;
-    dispatch_once_t onceToken = nil;
+    dispatch_once_t onceToken = nil; //+ =0 and delete dispatch_once completely!
     dispatch_once(&onceToken, ^{
         UIGraphicsBeginImageContextWithOptions(CGSizeMake(radius, radius), NO, 0.0f);
         CGContextRef ctx = UIGraphicsGetCurrentContext();
