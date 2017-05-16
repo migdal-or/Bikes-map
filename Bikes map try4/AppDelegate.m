@@ -8,15 +8,14 @@
 // TODO:
 // 2. table view
 // 3. distance to each station and search of nearest
-// 7. implement different icons:
-//    1) just different than annotation default,
-//    2) different for electric and mechanic bicycles,
-//    3) vary from station load
-// 8.
+// 8. different icons for electric and mechanic bicycles,
 //
 // 1. DONE move stations load and store service to model
 // 4. DONE zoom buttons
 // 5. DONE position zoom buttons
+// 7. DONE implement different icons:
+//    1) just different than annotation default,
+//    3) vary from station load
 //
 // 6. CANNOT YET Implement "loading" status - needs NSOperation wait locks to work
 
