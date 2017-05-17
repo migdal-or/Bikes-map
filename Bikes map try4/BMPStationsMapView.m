@@ -9,7 +9,6 @@
 #import "BMPStationsMapView.h"
 #import <MapKit/MapKit.h>
 #import "BMPAnnotation.h"
-#import "BMPLoadStations.h"
 #import <UIKit/UIKit.h>
 
 #import <QuartzCore/QuartzCore.h>
@@ -29,6 +28,8 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 @implementation BMPStationsMapView
 
+#pragma mark System methods
+
 -(instancetype)init {
     self = [super init];
     
@@ -38,13 +39,41 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     NSString *regexStr=@".+(Механическая|Электрическая).\\n([0-9]+) мест. Свободных ([0-9]+)";
     _aRegx=[NSRegularExpression regularExpressionWithPattern:regexStr options:NSRegularExpressionCaseInsensitive error:nil];
 
+    _locationWasObtained = NO;
+
     return self;
 }
 
-#pragma mark System methods
+-(void)viewDidLoad {
+    //+ move code from didload to subs
+    
+    [super viewDidLoad];
+    [self createMapView];
+    
+    [self loadStations];
+}
+
+#pragma mark utility methods
+
+-(void)loadStations {
+    //    // start getting stations from api or local file
+    NSDictionary * parkings;
+    _labelOnTopOfMap.hidden = NO;
+    parkings = [_stationsLoader loadStations];
+    //+ вот сюда надо воткнуть делегирование лоадеру и ожидание асинхронной загрузки
+    
+    _labelOnTopOfMap.text = @"Loading stations,\nplease wait";
+    _labelOnTopOfMap.textColor = [UIColor blackColor];
+    _labelOnTopOfMap.hidden = YES;
+    
+    if (DEBUG) { NSLog(@"init stations"); }
+    [self annotateParkings: parkings[@"Items"]];
+    
+    _labelOnTopOfMap.text = @"You got too far from Moscow,\nplease fly back :)";
+    _labelOnTopOfMap.textColor = [UIColor redColor];
+}
 
 -(void)createMapView {
-    
     // create map view
     _bikesMap = [MKMapView new];
     _bikesMap.delegate = self;
@@ -100,35 +129,9 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     _labelOnTopOfMap.numberOfLines = 0;
     _labelOnTopOfMap.frame = CGRectMake(0, (self.view.bounds.size.height-TOOFAR_LABEL_HEIGHT)/2, self.view.bounds.size.width, TOOFAR_LABEL_HEIGHT);
     [self.view addSubview:_labelOnTopOfMap];
-    _labelOnTopOfMap.text = @"Loading stations,\nplease wait";
-    _labelOnTopOfMap.textColor = [UIColor blackColor];
-
 }
 
-- (void)viewDidLoad {
-    //+ move code from didload to subs
-    
-    [super viewDidLoad];
-    _locationWasObtained = NO;
-
-    [self createMapView];
-
-//    // start getting stations from api or local file
-    NSDictionary * parkings;
-    _labelOnTopOfMap.hidden = NO;
-    // Cергей зачем-то сказал переписать это на минусовых методах, хотя нормально и на плюсах работало.
-    BMPLoadStations *stationsLoader = [BMPLoadStations new];
-    parkings = [stationsLoader loadStations];
-    _labelOnTopOfMap.hidden = YES;
-
-    if (DEBUG) { NSLog(@"init stations"); }
-    [self annotateParkings: [parkings objectForKey:@"Items"]];
-
-    _labelOnTopOfMap.text = @"You got too far from Moscow,\nplease fly back :)";
-    _labelOnTopOfMap.textColor = [UIColor redColor];
-}
-
-- (void)annotateParkings: (NSDictionary *) parkings {
+-(void)annotateParkings: (NSDictionary *) parkings {
     if (DEBUG) { NSLog(@"annotating %d stations", [parkings count]); }
     //dlog
     BMPAnnotation * annot;
@@ -139,7 +142,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     }
 }
 
-- (void)zoomBtnClicked:(UIButton*)sender{
+-(void)zoomBtnClicked:(UIButton*)sender{
     if (DEBUG) { NSLog(@"%d icons init", [_bikeIcons count]); }
     switch (sender.tag)
     {
@@ -181,14 +184,14 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     }
 }
 
-- (void)didReceiveMemoryWarning {
+-(void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
 #pragma mark Map methods
 
-- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
+-(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
     if (DEBUG) { NSLog(@"did update location map"); } //this one works
     _locationWasObtained = YES;
     
@@ -270,7 +273,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 -(UIImage *)buildStationIcon: (BOOL) electric and: (CGFloat) load {
     UIImage *whatWeBuild;
     NSString *key = [NSString stringWithFormat:@"%@ %.02f", electric?@"e":@"m", load];
-    if (nil==[_bikeIcons objectForKey:key]) {   //caches icons based on their key values like "m 1.0000"
+    if (nil==_bikeIcons[key]) {   //caches icons based on their key values like "m 1.0000"
         UIColor *thiscolor = [UIColor colorWithHue: load saturation:1.0 brightness:1.0 alpha:1.0];
         // insert different circle for electric bike
         UIImage *circleIcon = [BMPStationsMapView Circle:18.0f and: thiscolor];
@@ -278,7 +281,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
         [_bikeIcons setObject:whatWeBuild forKey:key];
         return whatWeBuild; //it returns differently coloured icons but they are not being drawn
     } else {
-        return [_bikeIcons objectForKey:key];
+        return _bikeIcons[key];
     };
 }
 
@@ -294,7 +297,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 +(UIImage *)Circle: (CGFloat) radius and: (UIColor *) color {
     __block UIImage *Circle = nil;
-    dispatch_once_t onceToken = nil; //+ =0 and delete dispatch_once completely!
+    dispatch_once_t onceToken = 0; //+ =0 and delete dispatch_once completely!
     dispatch_once(&onceToken, ^{
         UIGraphicsBeginImageContextWithOptions(CGSizeMake(radius, radius), NO, 0.0f);
         CGContextRef ctx = UIGraphicsGetCurrentContext();

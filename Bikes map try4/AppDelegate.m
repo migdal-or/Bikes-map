@@ -11,7 +11,7 @@
 // 8. different icons for electric and mechanic bicycles,
 // 9. Paint red-yellow-green palette for stations color
 // 10. dequeue map view annotation?
-// 11. mode location manager to ext service
+// 11. move location manager to ext service
 //
 // 1. DONE move stations load and store service to model
 // 4. DONE zoom buttons
@@ -37,12 +37,15 @@
 @implementation AppDelegate
 
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+-(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
     UIWindow *window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     
+    BMPLoadStations *stationsLoader = [BMPLoadStations new];
+
     BMPStationsMapView * stationsMapView = [BMPStationsMapView new];
     stationsMapView.title = @"stations map";
+    stationsMapView.stationsLoader = stationsLoader;
     
     BMPStationsTableView * tableView = [BMPStationsTableView new];
     tableView.title = @"stations table";
@@ -76,29 +79,29 @@
 }
 
 
-- (void)applicationWillResignActive:(UIApplication *)application {
+-(void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
 }
 
 
-- (void)applicationDidEnterBackground:(UIApplication *)application {
+-(void)applicationDidEnterBackground:(UIApplication *)application {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
 
 
-- (void)applicationWillEnterForeground:(UIApplication *)application {
+-(void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
 }
 
 
-- (void)applicationDidBecomeActive:(UIApplication *)application {
+-(void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
 
-- (void)applicationWillTerminate:(UIApplication *)application {
+-(void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
