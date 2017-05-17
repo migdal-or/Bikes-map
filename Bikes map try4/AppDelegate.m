@@ -67,11 +67,7 @@
     tabBarItem = [vc.tabBar.items objectAtIndex:0];
     [tabBarItem setImage:tabBarImage];
     [tabBarItem setSelectedImage:tabBarImage];
-    
-//    [stationsMapView setTabBarHeight:vc.tabBar.bounds.size.height];
-//    tableView.tabBarHeight = vc.tabBar.bounds.size.height;
-//    ridesHistory.tabBarHeight = vc.tabBar.bounds.size.height;
-    
+       
     window.rootViewController = vc;
     self.window = window;
     [window makeKeyAndVisible];

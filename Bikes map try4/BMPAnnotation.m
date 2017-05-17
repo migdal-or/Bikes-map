@@ -2,8 +2,8 @@
 //  BMPAnnotation.m
 //  Bikes map try4
 //
-//  Created by Admin on 11/05/2017.
-//  Copyright © 2017 Admin. All rights reserved.
+//  Created by Dmitry A. Zvorykin on 11/05/2017.
+//  Copyright © 2017 Dmitry A. Zvorykin. All rights reserved.
 //
 
 #import "BMPAnnotation.h"
@@ -19,7 +19,7 @@
 
 @implementation BMPAnnotation
 
--(id)initWithDict:(NSDictionary *)parameters {
+-(instancetype)initWithDictionary:(NSDictionary *)parameters {
     if (self) {
         if ([@"true" isEqualToString:[parameters valueForKey:@"IsLocked"]]) return nil; //+ обращение к словарям через [], no valueforkey
         

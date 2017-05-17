@@ -14,8 +14,6 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-#define DEBUGGING YES
-
 static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 @interface BMPStationsMapView ()
@@ -118,10 +116,12 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 //    // start getting stations from api or local file
     NSDictionary * parkings;
     _labelOnTopOfMap.hidden = NO;
-    parkings = [BMPLoadStations loadStations];
+    // Cергей зачем-то сказал переписать это на минусовых методах, хотя нормально и на плюсах работало.
+    BMPLoadStations *stationsLoader = [BMPLoadStations new];
+    parkings = [stationsLoader loadStations];
     _labelOnTopOfMap.hidden = YES;
 
-//    NSLog(@"init stations");
+    if (DEBUG) { NSLog(@"init stations"); }
     [self annotateParkings: [parkings objectForKey:@"Items"]];
 
     _labelOnTopOfMap.text = @"You got too far from Moscow,\nplease fly back :)";
@@ -133,14 +133,14 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     //dlog
     BMPAnnotation * annot;
     for (NSDictionary * station in parkings) {
-        annot = [[BMPAnnotation alloc] initWithDict:station];
+        annot = [[BMPAnnotation alloc] initWithDictionary:station];
         
         [_bikesMap addAnnotation:annot];
     }
 }
 
 - (void)zoomBtnClicked:(UIButton*)sender{
-    if (DEBUGGING) { NSLog(@"%d icons init", [_bikeIcons count]); }
+    if (DEBUG) { NSLog(@"%d icons init", [_bikeIcons count]); }
     switch (sender.tag)
     {
         case BMPzoomPlus: {
@@ -189,7 +189,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 #pragma mark Map methods
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
-    if (DEBUGGING) { NSLog(@"did update location map"); } //this one works
+    if (DEBUG) { NSLog(@"did update location map"); } //this one works
     _locationWasObtained = YES;
     
     

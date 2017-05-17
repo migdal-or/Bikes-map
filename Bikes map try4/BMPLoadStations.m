@@ -2,15 +2,14 @@
 //  BMPLoadStations.m
 //  Bikes map try4
 //
-//  Created by iOS-School-1 on 13/05/2017.
-//  Copyright © 2017 Admin. All rights reserved.
+//  Created by Dmitry A. Zvorykin on 13/05/2017.
+//  Copyright © 2017 Dmitry A. Zvorykin. All rights reserved.
 //
 
 #import "BMPLoadStations.h"
-#define LOCAL_MODE YES // just to skip all this iTunes bullshit and load data from local file )
-#define STORE_FILE YES // save itunes data if non-local mode call?
-#define ARCHIVE_FILE_PATH @"/Users/user/Desktop/bicycles.data" //"/Users/admin/Desktop/bicycles.data"
-//+ move defines to static const
+static BOOL const LOCAL_MODE = YES;  // just to skip all this networking bullshit and load data from local file )
+static BOOL const STORE_FILE = YES;  // store net data if non-local mode call?
+static NSString const *ARCHIVE_FILE_PATH = @"/Users/admin/Desktop/bicycles.data"; //"/Users/user/Desktop/bicycles.data"
 
 @interface BMPLoadStations ()
 
@@ -22,7 +21,7 @@
 
 static NSDictionary * parkings;
 
-+(NSDictionary *)loadStations {
+-(NSDictionary *)loadStations {
     // DONE TODO 1. Save stations object and return cached copy between calls if the object has already been retrieved
     if (nil == parkings) {
         __block NSDictionary * local_parkings;
@@ -59,7 +58,7 @@ static NSDictionary * parkings;
                                                             
                                                         }];
             [dataTask resume];
-            while (nil == local_parkings) { // do never do like this!
+            while (nil == local_parkings) { //+ do never do like this!
                 NSLog(@"wait");
                 usleep(100000);
             //+ переписать на вызов метода делегата в конце

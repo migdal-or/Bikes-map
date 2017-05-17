@@ -2,14 +2,14 @@
 //  BMPLoadStations.h
 //  Bikes map try4
 //
-//  Created by iOS-School-1 on 13/05/2017.
-//  Copyright © 2017 Admin. All rights reserved.
+//  Created by Dmitry A. Zvorykin on 13/05/2017.
+//  Copyright © 2017 Dmitry A. Zvorykin. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
 @interface BMPLoadStations : NSObject
 
-+(NSDictionary *)loadStations;
+-(NSDictionary *)loadStations;
 
 @end
