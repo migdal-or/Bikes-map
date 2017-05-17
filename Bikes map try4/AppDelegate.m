@@ -12,6 +12,7 @@
 // 9. Paint red-yellow-green palette for stations color
 // 10. dequeue map view annotation?
 // 11. move location manager to ext service
+// 12. Make label on top on map disappear
 //
 // 1. DONE move stations load and store service to model
 // 4. DONE zoom buttons
@@ -30,7 +31,7 @@
 
 @interface AppDelegate ()
 
-@property (nonatomic, strong) CLLocationManager * locationManager;
+@property (nonatomic, strong) CLLocationManager *locationManager;
 
 @end
 
@@ -43,14 +44,14 @@
     
     BMPLoadStations *stationsLoader = [BMPLoadStations new];
 
-    BMPStationsMapView * stationsMapView = [BMPStationsMapView new];
+    BMPStationsMapView *stationsMapView = [BMPStationsMapView new];
     stationsMapView.title = @"stations map";
     stationsMapView.stationsLoader = stationsLoader;
     
-    BMPStationsTableView * tableView = [BMPStationsTableView new];
+    BMPStationsTableView *tableView = [BMPStationsTableView new];
     tableView.title = @"stations table";
     
-    BMPRidesHistoryView * ridesHistory = [BMPRidesHistoryView new];
+    BMPRidesHistoryView *ridesHistory = [BMPRidesHistoryView new];
     ridesHistory.title = @"velobike history";
     
     _locationManager = [CLLocationManager new];

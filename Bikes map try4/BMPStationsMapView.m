@@ -10,19 +10,19 @@
 #import <MapKit/MapKit.h>
 #import "BMPAnnotation.h"
 #import <UIKit/UIKit.h>
-
-#import <QuartzCore/QuartzCore.h>
+//#import <QuartzCore/QuartzCore.h>
 
 static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
-@interface BMPStationsMapView ()
+@interface BMPStationsMapView () <LoaderDelegate>
 
 @property (nonatomic, strong) MKMapView *bikesMap;
 @property (nonatomic, strong) UILabel *labelOnTopOfMap;
 @property (nonatomic, assign) BOOL locationWasObtained;
-@property (nonatomic, strong) UIImage* bikeIcon;
+@property (nonatomic, strong) UIImage *bikeIcon;
 @property (nonatomic, strong) NSMutableDictionary *bikeIcons;
 @property (nonatomic, strong) NSRegularExpression *aRegx;
+@property (nonatomic, strong) NSDictionary *parkings;
 
 @end
 
@@ -45,32 +45,47 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 }
 
 -(void)viewDidLoad {
-    //+ move code from didload to subs
-    
     [super viewDidLoad];
+
     [self createMapView];
     
     [self loadStations];
 }
 
+-(void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
 #pragma mark utility methods
 
--(void)loadStations {
-    //    // start getting stations from api or local file
-    NSDictionary * parkings;
-    _labelOnTopOfMap.hidden = NO;
-    parkings = [_stationsLoader loadStations];
-    //+ вот сюда надо воткнуть делегирование лоадеру и ожидание асинхронной загрузки
+- (void)stationsGotLoaded: (NSDictionary *) parkings {
+    // is being called when async download of stations finishes
+    // so we can continue
     
-    _labelOnTopOfMap.text = @"Loading stations,\nplease wait";
-    _labelOnTopOfMap.textColor = [UIColor blackColor];
-    _labelOnTopOfMap.hidden = YES;
+    _parkings = parkings;    
     
-    if (DEBUG) { NSLog(@"init stations"); }
-    [self annotateParkings: parkings[@"Items"]];
+    if (DEBUG) { NSLog(@"init stations done"); }
+    _stationsLoader.delegate = nil;
+    [self annotateParkings: _parkings[@"Items"]];
     
     _labelOnTopOfMap.text = @"You got too far from Moscow,\nplease fly back :)";
     _labelOnTopOfMap.textColor = [UIColor redColor];
+    [[_bikesMap subviews][1] setHidden:YES];  //DOES NOT WORK
+    _labelOnTopOfMap.hidden = YES;  //DOES NOT WORK
+
+}
+
+-(void)loadStations {
+    // start getting stations from api or local file
+    
+    _labelOnTopOfMap.text = @"Loading stations,\nplease wait";
+    _labelOnTopOfMap.textColor = [UIColor blackColor];
+    _labelOnTopOfMap.hidden = NO;
+
+    // делегирование лоадеру и ожидание асинхронной загрузки
+    _stationsLoader.delegate = self;
+    [_stationsLoader loadStations];
 }
 
 -(void)createMapView {
@@ -133,12 +148,11 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 -(void)annotateParkings: (NSDictionary *) parkings {
     if (DEBUG) { NSLog(@"annotating %d stations", [parkings count]); }
-    //dlog
-    BMPAnnotation * annot;
-    for (NSDictionary * station in parkings) {
-        annot = [[BMPAnnotation alloc] initWithDictionary:station];
-        
-        [_bikesMap addAnnotation:annot];
+    //+ dlog
+    BMPAnnotation *oneAnnotation;
+    for (NSDictionary *station in parkings) {
+        oneAnnotation = [[BMPAnnotation alloc] initWithDictionary:station];
+        [_bikesMap addAnnotation:oneAnnotation];
     }
 }
 
@@ -184,17 +198,16 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     }
 }
 
--(void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 #pragma mark Map methods
+
+//- (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView { // DOES NOT WORK
+//    if (DEBUG) { NSLog(@"mapViewDidFinishLoadingMap"); }
+//    _labelOnTopOfMap.hidden = YES;
+//}
 
 -(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
     if (DEBUG) { NSLog(@"did update location map"); } //this one works
     _locationWasObtained = YES;
-    
     
     MKCoordinateRegion region;
     MKCoordinateSpan span;
@@ -205,8 +218,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     location.longitude = userLocation.coordinate.longitude;
     region.span = span;
     region.center = location;
-    [_bikesMap setRegion:region animated:YES];
-    
+    [_bikesMap setRegion:region animated:NO];
     
     CLLocationCoordinate2D MoscowCenter = {55.755786, 37.617633};
     CLLocation *MoscowLocation = [[CLLocation alloc]
@@ -222,9 +234,9 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     if (distance > 20000) {
 //        NSLog(@"you got too far from moscow");
         _labelOnTopOfMap.hidden = NO;
-        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"location error" message:@"You got too far from Moscow, please fly back :)" preferredStyle:UIAlertControllerStyleActionSheet];
-        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-                                                              handler:^(UIAlertAction * action) {}];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"location error" message:@"You got too far from Moscow, please fly back :)" preferredStyle:UIAlertControllerStyleActionSheet];
+        UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction *action) {}];
         
         [alert addAction:defaultAction];
         [self presentViewController:alert animated:YES completion:nil];
@@ -234,7 +246,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 }
 
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
-    //dequeue?
+    //+ dequeue?
     if ([annotation isKindOfClass:[MKUserLocation class]]) {    // no special annotation for @"My Location"]
         return nil; }
     
@@ -276,8 +288,8 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     if (nil==_bikeIcons[key]) {   //caches icons based on their key values like "m 1.0000"
         UIColor *thiscolor = [UIColor colorWithHue: load saturation:1.0 brightness:1.0 alpha:1.0];
         // insert different circle for electric bike
-        UIImage *circleIcon = [BMPStationsMapView Circle:18.0f and: thiscolor];
-        whatWeBuild = [BMPStationsMapView overlayImage:_bikeIcon inImage:circleIcon atPoint:CGPointMake(0, 3)];
+        UIImage *circleIcon = [self Circle:18.0f and: thiscolor];
+        whatWeBuild = [self overlayImage:_bikeIcon inImage:circleIcon atPoint:CGPointMake(0, 3)];
         [_bikeIcons setObject:whatWeBuild forKey:key];
         return whatWeBuild; //it returns differently coloured icons but they are not being drawn
     } else {
@@ -285,32 +297,28 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     };
 }
 
-+(UIImage *)overlayImage:(UIImage*) fgImage inImage:(UIImage*) bgImage atPoint:(CGPoint) point {
+-(UIImage *)overlayImage:(UIImage*) fgImage inImage:(UIImage*) bgImage atPoint:(CGPoint) point {
     UIGraphicsBeginImageContextWithOptions(bgImage.size, FALSE, 0.0);
-    [bgImage drawInRect:CGRectMake( 0, 0, bgImage.size.width, bgImage.size.height)];
-    [fgImage drawInRect:CGRectMake( point.x, point.y, fgImage.size.width, fgImage.size.height)];
+    [bgImage drawInRect:CGRectMake(0, 0, bgImage.size.width, bgImage.size.height)];
+    [fgImage drawInRect:CGRectMake(point.x, point.y, fgImage.size.width, fgImage.size.height)];
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
     return newImage;
 }
 
-+(UIImage *)Circle: (CGFloat) radius and: (UIColor *) color {
-    __block UIImage *Circle = nil;
-    dispatch_once_t onceToken = 0; //+ =0 and delete dispatch_once completely!
-    dispatch_once(&onceToken, ^{
-        UIGraphicsBeginImageContextWithOptions(CGSizeMake(radius, radius), NO, 0.0f);
-        CGContextRef ctx = UIGraphicsGetCurrentContext();
-        CGContextSaveGState(ctx);
-        
-        CGRect rect = CGRectMake(0, 0, radius, radius);
-        CGContextSetFillColorWithColor(ctx, color.CGColor);
-        CGContextFillEllipseInRect(ctx, rect);
-        
-        CGContextRestoreGState(ctx);
-        Circle = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();        
-    });
+-(UIImage *)Circle: (CGFloat) radius and: (UIColor *) color {
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(radius, radius), NO, 0.0f);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+//    CGContextSaveGState(ctx);
+    
+    CGRect rect = CGRectMake(0, 0, radius, radius);
+    CGContextSetFillColorWithColor(ctx, color.CGColor);
+    CGContextFillEllipseInRect(ctx, rect);
+    
+//    CGContextRestoreGState(ctx);
+    UIImage *Circle = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
     return Circle;
 }
 

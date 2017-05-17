@@ -21,8 +21,8 @@ typedef NS_ENUM(NSUInteger, BMPzoomButtonValues) {
 };
 
 -(void)zoomBtnClicked:(UIButton*)sender;
-+(UIImage *)Circle: (CGFloat) radius and: (UIColor *) color;
-+(UIImage *)overlayImage:(UIImage*) fgImage inImage:(UIImage*) bgImage atPoint:(CGPoint) point;
+-(UIImage *)Circle: (CGFloat) radius and: (UIColor *) color;
+-(UIImage *)overlayImage:(UIImage*) fgImage inImage:(UIImage*) bgImage atPoint:(CGPoint) point;
 
 -(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation;
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation;

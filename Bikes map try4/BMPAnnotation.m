@@ -45,7 +45,7 @@
 
         unsigned int total_places = [parameters[@"TotalPlaces"] doubleValue];
         unsigned int free_places = [parameters[@"FreePlaces"] doubleValue];
-        NSString * address = parameters[@"Address"];
+        NSString *address = parameters[@"Address"];
         
         _subtitle = [NSString stringWithFormat:@"%@. %@.\n%u мест. Свободных %u", address, is_electric, total_places, free_places];
         temp = [NSString stringWithFormat:@"^(%03d - )*", [stationNumber integerValue]];
