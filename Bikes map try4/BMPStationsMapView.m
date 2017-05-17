@@ -54,6 +54,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 -(void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+    NSLog(@"didReceiveMemoryWarning");
     // Dispose of any resources that can be recreated.
 }
 
@@ -62,23 +63,23 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 - (void)stationsGotLoaded: (NSDictionary *) parkings {
     // is being called when async download of stations finishes
     // so we can continue
-    
-    _parkings = parkings;    
-    
-    if (DEBUG) { NSLog(@"init stations done"); }
-    _stationsLoader.delegate = nil;
-    [self annotateParkings: _parkings[@"Items"]];
-    
-    _labelOnTopOfMap.text = @"You got too far from Moscow,\nplease fly back :)";
-    _labelOnTopOfMap.textColor = [UIColor redColor];
-    [[_bikesMap subviews][1] setHidden:YES];  //DOES NOT WORK
-    _labelOnTopOfMap.hidden = YES;  //DOES NOT WORK
 
+    _stationsLoader.delegate = nil;
+    
+    if ((nil == parkings) || (nil == parkings[@"Items"])) {
+        NSLog(@"received no data");
+    } else {
+        _parkings = parkings[@"Items"];
+        if (DEBUG) { NSLog(@"init stations done"); }
+        [self annotateParkings: _parkings];
+    }
+
+    [[_bikesMap subviews][1] setHidden:YES];  //DOES NOT WORK if nonlocal
+    _labelOnTopOfMap.hidden = YES;  //DOES NOT WORK
 }
 
 -(void)loadStations {
-    // start getting stations from api or local file
-    
+    // start getting stations from api or local file    
     _labelOnTopOfMap.text = @"Loading stations,\nplease wait";
     _labelOnTopOfMap.textColor = [UIColor blackColor];
     _labelOnTopOfMap.hidden = NO;
@@ -200,9 +201,9 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 #pragma mark Map methods
 
-//- (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView { // DOES NOT WORK
+//- (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView {
 //    if (DEBUG) { NSLog(@"mapViewDidFinishLoadingMap"); }
-//    _labelOnTopOfMap.hidden = YES;
+//    _labelOnTopOfMap.hidden = YES;        // DOES NOT WORK
 //}
 
 -(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
@@ -233,6 +234,8 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 //    NSLog(@"%@", [NSString stringWithFormat:@"Distance to point %4.0f m.", distance]);
     if (distance > 20000) {
 //        NSLog(@"you got too far from moscow");
+        _labelOnTopOfMap.text = @"You got too far from Moscow,\nplease fly back :)";
+        _labelOnTopOfMap.textColor = [UIColor redColor];
         _labelOnTopOfMap.hidden = NO;
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"location error" message:@"You got too far from Moscow, please fly back :)" preferredStyle:UIAlertControllerStyleActionSheet];
         UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault

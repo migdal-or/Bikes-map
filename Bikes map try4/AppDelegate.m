@@ -50,7 +50,8 @@
     
     BMPStationsTableView *tableView = [BMPStationsTableView new];
     tableView.title = @"stations table";
-    
+    tableView.stationsLoader = stationsLoader;
+
     BMPRidesHistoryView *ridesHistory = [BMPRidesHistoryView new];
     ridesHistory.title = @"velobike history";
     
