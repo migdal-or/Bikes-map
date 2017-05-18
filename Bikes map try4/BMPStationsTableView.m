@@ -15,7 +15,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 @property (nonatomic, strong) UILabel *labelOnTopOfMap;
 @property (nonatomic, assign) BOOL locationWasObtained;
-@property (nonatomic, strong) NSDictionary *parkings;
+@property (nonatomic, strong) NSArray *parkings;
 
 @end
 
@@ -35,11 +35,10 @@ static NSString const *cellReuseIdentifier = @"cellReuseIdentifier";
 - (void)didLoadStations:(NSDictionary *) parkings {
     // is being called when async download of stations finishes
     // so we can continue
-    
-    _parkings = parkings[@"Items"];
-    
-    if (DEBUG) { NSLog(@"init stations done"); }
     _stationsLoader.delegate = nil;
+    
+    _parkings = [parkings[@"Items"] allValues];
+    if (DEBUG) { NSLog(@"init stations done"); }
     
 //    [[_bikesMap subviews][1] setHidden:YES];  //DOES NOT WORK if nonlocal
     _labelOnTopOfMap.hidden = YES;  //DOES NOT WORK
@@ -88,6 +87,7 @@ static NSString const *cellReuseIdentifier = @"cellReuseIdentifier";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 //#warning Incomplete implementation, return the number of rows
+    if (DEBUG) { NSLog(@"inited %d items", _parkings.count); }
     return [_parkings count];
 }
 
@@ -95,7 +95,12 @@ static NSString const *cellReuseIdentifier = @"cellReuseIdentifier";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     BMPTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellReuseIdentifier forIndexPath:indexPath];
     
-    // Configure the cell...
+    NSUInteger cellRow = indexPath.row;
+//    ADBContact *contactToAdd = (ADBContact *) [self.addressBook objectAtIndexedSubscript: cellRow];
+//    
+//    [(ADBCellTableViewCell *) cell addContactToCell: (ADBContact *) contactToAdd thiscontact: cellRow of: self.addressBook.count];
+//    
+//    [cell layer].borderWidth = 1.0f;
     
     return cell;
 }
