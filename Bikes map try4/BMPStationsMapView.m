@@ -14,7 +14,7 @@
 
 static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
-@interface BMPStationsMapView () <LoaderDelegate>
+@interface BMPStationsMapView ()
 
 @property (nonatomic, strong) MKMapView *bikesMap;
 @property (nonatomic, strong) UILabel *labelOnTopOfMap;
@@ -30,7 +30,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 #pragma mark System methods
 
--(instancetype)init {
+- (instancetype)init {
     self = [super init];
     
     _bikeIcon = [UIImage imageNamed:@"station icon 18 black"];
@@ -44,7 +44,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     return self;
 }
 
--(void)viewDidLoad {
+- (void)viewDidLoad {
     [super viewDidLoad];
 
     [self createMapView];
@@ -52,33 +52,35 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     [self loadStations];
 }
 
--(void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     NSLog(@"didReceiveMemoryWarning");
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark utility methods
+#pragma mark protocol delegate method
 
-- (void)stationsGotLoaded: (NSDictionary *) parkings {
+- (void)didLoadStations:(NSDictionary *) parkings {
     // is being called when async download of stations finishes
     // so we can continue
 
     _stationsLoader.delegate = nil;
     
-    if ((nil == parkings) || (nil == parkings[@"Items"])) {
+    if ((!parkings) || (!parkings[@"Items"])) {
         NSLog(@"received no data");
     } else {
         _parkings = parkings[@"Items"];
         if (DEBUG) { NSLog(@"init stations done"); }
-        [self annotateParkings: _parkings];
+        [self annotateParkings:_parkings];
     }
 
     [[_bikesMap subviews][1] setHidden:YES];  //DOES NOT WORK if nonlocal
     _labelOnTopOfMap.hidden = YES;  //DOES NOT WORK
 }
 
--(void)loadStations {
+#pragma mark utility methods
+
+- (void)loadStations {
     // start getting stations from api or local file    
     _labelOnTopOfMap.text = @"Loading stations,\nplease wait";
     _labelOnTopOfMap.textColor = [UIColor blackColor];
@@ -89,7 +91,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     [_stationsLoader loadStations];
 }
 
--(void)createMapView {
+- (void)createMapView {
     // create map view
     _bikesMap = [MKMapView new];
     _bikesMap.delegate = self;
@@ -99,7 +101,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     
     // position map view
     _bikesMap.translatesAutoresizingMaskIntoConstraints = NO;
-    id views = @{ @"mapView": _bikesMap };
+    id views = @{ @"mapView":_bikesMap };
     CGFloat tabBarHeight = self.tabBarController.tabBar.bounds.size.height; //столько надо отступить снизу чтобы не прятать данные под таббаром
     NSString *verticalConstraint = [[NSString alloc] initWithFormat:@"V:|[mapView]-%d-|", (int)tabBarHeight];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:verticalConstraint options:0 metrics:nil views:views]];
@@ -112,25 +114,25 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     // implement zoom plus, minus, center buttons
     static CGFloat const imageRightOffset = 0.2;   // in button image width X
     static CGFloat const imagesTopOffset = 0.1;   // in screen size height X
-    UIButton *zoomPlusButton = [UIButton buttonWithType: UIButtonTypeCustom];
+    UIButton *zoomPlusButton = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *buttonImage = [UIImage imageNamed:@"zoomplus"];
-    [zoomPlusButton setImage:buttonImage forState: UIControlStateNormal];
+    [zoomPlusButton setImage:buttonImage forState:UIControlStateNormal];
     zoomPlusButton.frame = CGRectMake(self.view.bounds.size.width-buttonImage.size.width*(1+imageRightOffset), self.view.bounds.size.height*imagesTopOffset, buttonImage.size.width, buttonImage.size.height);
     zoomPlusButton.tag = BMPzoomPlus;
     [zoomPlusButton addTarget:self action:@selector(zoomBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     [_bikesMap addSubview:zoomPlusButton];
     
-    UIButton *locateButton = [UIButton buttonWithType: UIButtonTypeCustom];
+    UIButton *locateButton = [UIButton buttonWithType:UIButtonTypeCustom];
     buttonImage = [UIImage imageNamed:@"zoomcenter"];
-    [locateButton setImage:buttonImage forState: UIControlStateNormal];
+    [locateButton setImage:buttonImage forState:UIControlStateNormal];
     locateButton.frame = CGRectMake(self.view.bounds.size.width-buttonImage.size.width*(1+imageRightOffset), self.view.bounds.size.height*imagesTopOffset+buttonImage.size.height, buttonImage.size.width, buttonImage.size.height);
     locateButton.tag = BMPzoomCenter;
     [locateButton addTarget:self action:@selector(zoomBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     [_bikesMap addSubview:locateButton];
     
-    UIButton *zoomMinusButton = [UIButton buttonWithType: UIButtonTypeCustom];
+    UIButton *zoomMinusButton = [UIButton buttonWithType:UIButtonTypeCustom];
     buttonImage = [UIImage imageNamed:@"zoomminus"];
-    [zoomMinusButton setImage:buttonImage forState: UIControlStateNormal];
+    [zoomMinusButton setImage:buttonImage forState:UIControlStateNormal];
     zoomMinusButton.frame = CGRectMake(self.view.bounds.size.width-buttonImage.size.width*(1+imageRightOffset), self.view.bounds.size.height*imagesTopOffset+2*buttonImage.size.height, buttonImage.size.width, buttonImage.size.height);
     zoomMinusButton.tag = BMPzoomMinus;
     [zoomMinusButton addTarget:self action:@selector(zoomBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -138,7 +140,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     
     // add a label to show misc information
     _labelOnTopOfMap = [UILabel new];
-    _labelOnTopOfMap.font = [UIFont boldSystemFontOfSize: 18.0];
+    _labelOnTopOfMap.font = [UIFont boldSystemFontOfSize:18.0];
     _labelOnTopOfMap.textAlignment = NSTextAlignmentCenter;
     _labelOnTopOfMap.hidden = YES;
     _labelOnTopOfMap.lineBreakMode = NSLineBreakByWordWrapping;
@@ -147,7 +149,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     [self.view addSubview:_labelOnTopOfMap];
 }
 
--(void)annotateParkings: (NSDictionary *) parkings {
+- (void)annotateParkings:(NSDictionary *) parkings {
     if (DEBUG) { NSLog(@"annotating %d stations", [parkings count]); }
     //+ dlog
     BMPAnnotation *oneAnnotation;
@@ -157,7 +159,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     }
 }
 
--(void)zoomBtnClicked:(UIButton*)sender{
+- (void)zoomBtnClicked:(UIButton*)sender{
     if (DEBUG) { NSLog(@"%d icons init", [_bikeIcons count]); }
     switch (sender.tag)
     {
@@ -206,7 +208,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 //    _labelOnTopOfMap.hidden = YES;        // DOES NOT WORK
 //}
 
--(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
     if (DEBUG) { NSLog(@"did update location map"); } //this one works
     _locationWasObtained = YES;
     
@@ -248,7 +250,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     }
 }
 
--(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
     //+ dequeue?
     if ([annotation isKindOfClass:[MKUserLocation class]]) {    // no special annotation for @"My Location"]
         return nil; }
@@ -285,13 +287,13 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 #pragma mark - graphics methods
 
--(UIImage *)buildStationIcon: (BOOL) electric and: (CGFloat) load {
+- (UIImage *)buildStationIcon:(BOOL) electric and:(CGFloat) load {
     UIImage *whatWeBuild;
     NSString *key = [NSString stringWithFormat:@"%@ %.02f", electric?@"e":@"m", load];
-    if (nil==_bikeIcons[key]) {   //caches icons based on their key values like "m 1.0000"
-        UIColor *thiscolor = [UIColor colorWithHue: load saturation:1.0 brightness:1.0 alpha:1.0];
+    if (!_bikeIcons[key]) {   //caches icons based on their key values like "m 1.0000"
+        UIColor *thiscolor = [UIColor colorWithHue:load saturation:1.0 brightness:1.0 alpha:1.0];
         // insert different circle for electric bike
-        UIImage *circleIcon = [self Circle:18.0f and: thiscolor];
+        UIImage *circleIcon = [self Circle:18.0f and:thiscolor];
         whatWeBuild = [self overlayImage:_bikeIcon inImage:circleIcon atPoint:CGPointMake(0, 3)];
         [_bikeIcons setObject:whatWeBuild forKey:key];
         return whatWeBuild; //it returns differently coloured icons but they are not being drawn
@@ -300,7 +302,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     };
 }
 
--(UIImage *)overlayImage:(UIImage*) fgImage inImage:(UIImage*) bgImage atPoint:(CGPoint) point {
+- (UIImage *)overlayImage:(UIImage*) fgImage inImage:(UIImage*) bgImage atPoint:(CGPoint) point {
     UIGraphicsBeginImageContextWithOptions(bgImage.size, FALSE, 0.0);
     [bgImage drawInRect:CGRectMake(0, 0, bgImage.size.width, bgImage.size.height)];
     [fgImage drawInRect:CGRectMake(point.x, point.y, fgImage.size.width, fgImage.size.height)];
@@ -310,7 +312,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     return newImage;
 }
 
--(UIImage *)Circle: (CGFloat) radius and: (UIColor *) color {
+- (UIImage *)Circle:(CGFloat) radius and:(UIColor *) color {
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(radius, radius), NO, 0.0f);
     CGContextRef ctx = UIGraphicsGetCurrentContext();
 //    CGContextSaveGState(ctx);

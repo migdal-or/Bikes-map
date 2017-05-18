@@ -23,7 +23,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 static NSString const *cellReuseIdentifier = @"cellReuseIdentifier";
 
--(void)viewDidLoad {
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     [self createView];
@@ -32,7 +32,7 @@ static NSString const *cellReuseIdentifier = @"cellReuseIdentifier";
     
 }
 
-- (void)stationsGotLoaded: (NSDictionary *) parkings {
+- (void)didLoadStations:(NSDictionary *) parkings {
     // is being called when async download of stations finishes
     // so we can continue
     
@@ -47,7 +47,7 @@ static NSString const *cellReuseIdentifier = @"cellReuseIdentifier";
     [self.tableView reloadData];
 }
 
--(void)loadStations {
+- (void)loadStations {
     // start getting stations from api or local file
     _labelOnTopOfMap.text = @"Loading stations,\nplease wait";
     _labelOnTopOfMap.textColor = [UIColor blackColor];
@@ -58,13 +58,13 @@ static NSString const *cellReuseIdentifier = @"cellReuseIdentifier";
     [_stationsLoader loadStations];
 }
 
--(void)createView {
+- (void)createView {
     //столько надо отступить снизу чтобы не прятать данные под таббаром
     self.tableView.bounds = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height - self.tabBarController.tabBar.bounds.size.height);
     
     // add a label to show misc information
     _labelOnTopOfMap = [UILabel new];
-    _labelOnTopOfMap.font = [UIFont boldSystemFontOfSize: 18.0];
+    _labelOnTopOfMap.font = [UIFont boldSystemFontOfSize:18.0];
     _labelOnTopOfMap.textAlignment = NSTextAlignmentCenter;
     _labelOnTopOfMap.hidden = YES;
     _labelOnTopOfMap.lineBreakMode = NSLineBreakByWordWrapping;
@@ -73,7 +73,7 @@ static NSString const *cellReuseIdentifier = @"cellReuseIdentifier";
     [self.view addSubview:_labelOnTopOfMap];
 }
 
--(void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     NSLog(@"didReceiveMemoryWarning");
     // Dispose of any resources that can be recreated.
@@ -81,18 +81,18 @@ static NSString const *cellReuseIdentifier = @"cellReuseIdentifier";
 
 #pragma mark - Table view data source
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 #warning Incomplete implementation, return the number of sections
     return 0;
 }
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 //#warning Incomplete implementation, return the number of rows
     return [_parkings count];
 }
 
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     BMPTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellReuseIdentifier forIndexPath:indexPath];
     
     // Configure the cell...

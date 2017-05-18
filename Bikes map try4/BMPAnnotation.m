@@ -19,9 +19,9 @@
 
 @implementation BMPAnnotation
 
--(instancetype)initWithDictionary:(NSDictionary *)parameters {
+- (instancetype)initWithDictionary:(NSDictionary *)parameters {
     if (self) {
-        if ([@"true" isEqualToString: parameters[@"IsLocked"]]) return nil; // если станция заблокирована - не надо её рисовать
+        if ([@"true" isEqualToString:parameters[@"IsLocked"]]) return nil; // если станция заблокирована - не надо её рисовать
         
         NSString *is_electric, *stationNumber, *temp;
 

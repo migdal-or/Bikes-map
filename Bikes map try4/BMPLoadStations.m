@@ -19,16 +19,26 @@ static NSString const *ARCHIVE_FILE_PATH = @"/Users/admin/Desktop/bicycles.data"
 
 static NSDictionary *parkings;
 
--(void)loadStations {
+/**
+ Загружает данные. Нам всё равно откуда. Вообще, по уму, в рабочей обстановке
+ данные грузятся из АПИ велобайка, но для снижения нагрузки на сервера и освобождения
+ от необходимости быть онлайн при отладке сделан механизм загрузки из локального
+ файла дампа.
+ 
+ @ param ничего не принимает, решение о том откуда грузить, принимается исходя из констант при билде
+ @ return ничего не возвращает, запускает асинхронную загрузку и потом дёргает метод didLoadStations делегата
+ */
+
+- (void)loadStations {
     // DONE TODO 1. Save stations object and return cached copy between calls if the object has already been retrieved
-    if (nil == parkings) {
+    if (!parkings) {
         // start getting stations from api or local file
         NSData *data;
         if (LOCAL_MODE) {   // берём данные из локального файла или всё-таки из интернетов?
             data = [[NSData alloc] initWithContentsOfFile:ARCHIVE_FILE_PATH];
             NSDictionary *local_parkings = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
             parkings = local_parkings;
-            [_delegate stationsGotLoaded: parkings];
+            [_delegate didLoadStations:parkings];
         } else {
             __block NSDictionary *local_parkings;
             NSMutableURLRequest *request;
@@ -57,13 +67,13 @@ static NSDictionary *parkings;
                                           }
                                       }
                                       parkings = local_parkings;
-                                      [_delegate stationsGotLoaded: parkings];
+                                      [_delegate didLoadStations:parkings];
                                   }];
             [dataTask resume];
         }
-    } else {    // относится к if (nil == parkings)
+    } else {    // относится к if (!parkings)
     // в словаре parkings уже были данные, значит их уже загружали, значит можно вернуть сохранённую копию.
-    [_delegate stationsGotLoaded: parkings]; // надо обязательно возвращать результаты вот так или можно проще?
+    [_delegate didLoadStations:parkings]; // надо обязательно возвращать результаты вот так или можно проще?
     }
 }
 @end

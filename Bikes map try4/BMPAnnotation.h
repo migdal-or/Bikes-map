@@ -18,7 +18,7 @@
  @param parameters берёт nsdictionary полученный из JSON от API
  @return возвращает объект со свойствами аннотации: координата, заголовок, описание
  */
--(_Nullable instancetype)initWithDictionary:(nonnull NSDictionary *)parameters;
+- (_Nullable instancetype)initWithDictionary:(nonnull NSDictionary *)parameters;
 //+nullable - nonnull, писать полностью dictionary, писать nsdictionary<nsstring*,nsstring*)*
 //+ из конструкторов не возвращаем id, возвращаем instancetype
 

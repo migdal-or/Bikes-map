@@ -8,15 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol LoaderDelegate <NSObject>
-@required
-- (void)stationsGotLoaded: (NSDictionary *) parkings;
-@end
+@protocol LoaderDelegate;
 
 @interface BMPLoadStations : NSObject
 
 @property (nonatomic, weak) id<LoaderDelegate> delegate;
 
--(void)loadStations;
+- (void)loadStations;
 
+@end
+
+@protocol LoaderDelegate <NSObject>
+@required
+- (void)didLoadStations:(NSDictionary *) parkings;
 @end
