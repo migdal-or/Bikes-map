@@ -74,8 +74,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
         [self annotateParkings:_parkings];
     }
 
-    [[_bikesMap subviews][1] setHidden:YES];  //DOES NOT WORK if nonlocal
-    _labelOnTopOfMap.hidden = YES;  //DOES NOT WORK
+    _labelOnTopOfMap.hidden = YES;
 }
 
 #pragma mark utility methods
@@ -205,7 +204,6 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
 //- (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView {
 //    if (DEBUG) { NSLog(@"mapViewDidFinishLoadingMap"); }
-//    _labelOnTopOfMap.hidden = YES;        // DOES NOT WORK
 //}
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {

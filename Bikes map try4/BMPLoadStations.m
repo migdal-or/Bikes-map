@@ -7,7 +7,7 @@
 //
 
 #import "BMPLoadStations.h"
-static BOOL const LOCAL_MODE = YES;  // just to skip all this networking bullshit and load data from local file )
+static BOOL const LOCAL_MODE = NO;  // just to skip all this networking bullshit and load data from local file )
 static BOOL const STORE_FILE = NO;  // store net data if non-local mode call?
 static NSString const *ARCHIVE_FILE_PATH = @"/Users/admin/Desktop/bicycles.data"; //"/Users/user/Desktop/bicycles.data"
 
@@ -38,7 +38,7 @@ static NSDictionary *parkings;
             data = [[NSData alloc] initWithContentsOfFile:ARCHIVE_FILE_PATH];
             NSDictionary *local_parkings = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
             parkings = local_parkings;
-            [_delegate didLoadStations:parkings];
+            dispatch_async(dispatch_get_main_queue(), ^{ [_delegate didLoadStations:parkings]; });
         } else {
             __block NSDictionary *local_parkings;
             NSMutableURLRequest *request;
@@ -67,13 +67,13 @@ static NSDictionary *parkings;
                                           }
                                       }
                                       parkings = local_parkings;
-                                      [_delegate didLoadStations:parkings];
+                                      dispatch_async(dispatch_get_main_queue(), ^{ [_delegate didLoadStations:parkings]; });
                                   }];
             [dataTask resume];
         }
     } else {    // относится к if (!parkings)
     // в словаре parkings уже были данные, значит их уже загружали, значит можно вернуть сохранённую копию.
-    [_delegate didLoadStations:parkings]; // надо обязательно возвращать результаты вот так или можно проще?
+    dispatch_async(dispatch_get_main_queue(), ^{ [_delegate didLoadStations:parkings]; });
     }
 }
 @end

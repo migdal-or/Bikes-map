@@ -40,8 +40,7 @@ static NSString const *cellReuseIdentifier = @"cellReuseIdentifier";
     _parkings = [parkings[@"Items"] allValues];
     if (DEBUG) { NSLog(@"init stations done"); }
     
-//    [[_bikesMap subviews][1] setHidden:YES];  //DOES NOT WORK if nonlocal
-    _labelOnTopOfMap.hidden = YES;  //DOES NOT WORK
+    _labelOnTopOfMap.hidden = YES;
     
     [self.tableView reloadData];
 }
@@ -87,7 +86,7 @@ static NSString const *cellReuseIdentifier = @"cellReuseIdentifier";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 //#warning Incomplete implementation, return the number of rows
-    if (DEBUG) { NSLog(@"inited %d items", _parkings.count); }
+    if (DEBUG) { NSLog(@"init %d items", _parkings.count); };
     return [_parkings count];
 }
 
