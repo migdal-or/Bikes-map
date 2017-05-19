@@ -11,11 +11,11 @@
 
 static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
-@interface BMPStationsTableView () <LoaderDelegate>
+@interface BMPStationsTableView ()
 
 @property (nonatomic, strong) UILabel *labelOnTopOfMap;
 @property (nonatomic, assign) BOOL locationWasObtained;
-@property (nonatomic, strong) NSArray *parkings;
+@property (nonatomic, strong) NSArray<NSDictionary *> *parkings;
 
 @end
 
@@ -24,12 +24,16 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 static NSString const *cellReuseIdentifier = @"cellReuseIdentifier";
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
     [self createView];
     
     [self loadStations];
     
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+
 }
 
 - (void)didLoadStations:(NSDictionary *) parkings {
@@ -37,8 +41,8 @@ static NSString const *cellReuseIdentifier = @"cellReuseIdentifier";
     // so we can continue
     _stationsLoader.delegate = nil;
     
-    _parkings = [parkings[@"Items"] allValues];
-    if (DEBUG) { NSLog(@"init stations done"); }
+    _parkings = parkings[@"Items"];
+    if (DEBUG) { NSLog(@"init %d stations done", [_parkings count]); }
     
     _labelOnTopOfMap.hidden = YES;
     
@@ -81,7 +85,7 @@ static NSString const *cellReuseIdentifier = @"cellReuseIdentifier";
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 #warning Incomplete implementation, return the number of sections
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -92,14 +96,12 @@ static NSString const *cellReuseIdentifier = @"cellReuseIdentifier";
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView registerClass:[BMPTableViewCell class] forCellReuseIdentifier:cellReuseIdentifier];
     BMPTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellReuseIdentifier forIndexPath:indexPath];
     
-    NSUInteger cellRow = indexPath.row;
-//    ADBContact *contactToAdd = (ADBContact *) [self.addressBook objectAtIndexedSubscript: cellRow];
-//    
-//    [(ADBCellTableViewCell *) cell addContactToCell: (ADBContact *) contactToAdd thiscontact: cellRow of: self.addressBook.count];
-//    
-//    [cell layer].borderWidth = 1.0f;
+    [cell fillCellWithData:(NSDictionary *)_parkings[indexPath.row]];
+
+    //    [cell layer].borderWidth = 1.0f;
     
     return cell;
 }

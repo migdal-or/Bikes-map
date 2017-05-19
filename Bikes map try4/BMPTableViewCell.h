@@ -10,4 +10,11 @@
 
 @interface BMPTableViewCell : UITableViewCell
 
+@property(nonatomic, strong) UILabel *Id;
+@property(nonatomic, strong) UILabel *Address;
+@property(nonatomic, strong) UILabel *longText;
+@property(nonatomic, strong) UIImage *electric;
+
+- (void)fillCellWithData:(NSDictionary *)station;
+
 @end

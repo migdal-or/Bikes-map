@@ -12,7 +12,8 @@
 // 9. Paint red-yellow-green palette for stations color
 // 10. dequeue map view annotation?
 // 11. move location manager to ext service
-// 12. Make label on top on map disappear
+// 13. Both views should start their work only on button press
+// 15. Написать подробно все nsdictionary<nsstring:nsstring>*?
 //
 // 1. DONE move stations load and store service to model
 // 4. DONE zoom buttons
@@ -20,6 +21,8 @@
 // 7. DONE implement different icons:
 //    1) just different than annotation default,
 //    3) vary from station load
+// 12. DONE Make label on top on map disappear
+// 14. DONE Delete all non-public methods declarations from @interface
 //
 // 6. CANNOT YET Implement "loading" status - needs NSOperation wait locks to work
 
@@ -61,7 +64,8 @@
     }
     
     UITabBarController *vc = [UITabBarController new];    
-    vc.viewControllers = @[stationsMapView, tableView, ridesHistory];
+    vc.viewControllers = @[tableView, stationsMapView];
+//    vc.viewControllers = @[stationsMapView, tableView, ridesHistory];
     
     UIImage *tabBarImage = [[UIImage imageNamed:@"tabStations-grid"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     UITabBarItem *tabBarItem = [vc.tabBar.items objectAtIndex:1]; //items[0]

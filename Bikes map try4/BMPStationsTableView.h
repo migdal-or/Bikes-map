@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BMPLoadStations.h"
 
-@interface BMPStationsTableView : UITableViewController
+@interface BMPStationsTableView : UITableViewController<LoaderDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) BMPLoadStations *stationsLoader;
 

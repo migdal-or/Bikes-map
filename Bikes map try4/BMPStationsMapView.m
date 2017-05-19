@@ -22,7 +22,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 @property (nonatomic, strong) UIImage *bikeIcon;
 @property (nonatomic, strong) NSMutableDictionary *bikeIcons;
 @property (nonatomic, strong) NSRegularExpression *aRegx;
-@property (nonatomic, strong) NSDictionary *parkings;
+@property (nonatomic, strong) NSArray<NSDictionary *> *parkings;
 
 @end
 
@@ -73,7 +73,6 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
         if (DEBUG) { NSLog(@"init stations done"); }
         [self annotateParkings:_parkings];
     }
-
     _labelOnTopOfMap.hidden = YES;
 }
 
@@ -148,7 +147,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
     [self.view addSubview:_labelOnTopOfMap];
 }
 
-- (void)annotateParkings:(NSDictionary *) parkings {
+- (void)annotateParkings:(NSArray<NSDictionary *> *) parkings {
     if (DEBUG) { NSLog(@"annotating %d stations", [parkings count]); }
     //+ dlog
     BMPAnnotation *oneAnnotation;
@@ -270,7 +269,7 @@ static CGFloat const TOOFAR_LABEL_HEIGHT = 60;
 
     // @"ул. Селезнёвская, д.29, стр.1. Механическая.\n12 мест. Свободных 9";
     // we dissect such strings into 3 parts by previously prepared regular expression
-    NSArray *results=[_aRegx matchesInString:lbl.text options:0 range:NSMakeRange(0, lbl.text.length)];
+    NSArray<NSTextCheckingResult *> *results=[_aRegx matchesInString:lbl.text options:0 range:NSMakeRange(0, lbl.text.length)];
     NSTextCheckingResult *match = results[0];
     BOOL is_electric   =  ([[lbl.text substringWithRange:[match rangeAtIndex:1]] isEqualToString:@"Электрическая"]) ? YES : NO;
     NSString *totalPlaces = [lbl.text substringWithRange:[match rangeAtIndex:2]];

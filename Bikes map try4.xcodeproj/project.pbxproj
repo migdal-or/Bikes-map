@@ -133,9 +133,9 @@
 		84EE21AF1EC373530020EF13 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				84EE21B21EC3736A0020EF13 /* Stations table view */,
 				04E7BB851ECB778200461F26 /* Table view cell */,
 				84EE21AE1EC373490020EF13 /* Stations map */,
-				84EE21B21EC3736A0020EF13 /* Stations table view */,
 				84EE21B11EC373640020EF13 /* Rides history */,
 			);
 			name = View;
