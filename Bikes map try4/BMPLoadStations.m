@@ -9,7 +9,7 @@
 #import "BMPLoadStations.h"
 static BOOL const LOCAL_MODE = YES;  // just to skip all this networking bullshit and load data from local file )
 static BOOL const STORE_FILE = NO;  // store net data if non-local mode call?
-static NSString const *ARCHIVE_FILE_PATH = @"/Users/admin/Desktop/bicycles.data"; //"/Users/user/Desktop/bicycles.data"
+static NSString const *ARCHIVE_FILE_PATH = @"/Users/user/Desktop/bicycles.data"; //"/Users/admin/Desktop/bicycles.data"; //
 
 @interface BMPLoadStations ()
 

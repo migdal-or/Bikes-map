@@ -84,16 +84,14 @@ static NSString const *cellReuseIdentifier = @"cellReuseIdentifier";
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Incomplete implementation, return the number of sections
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 //#warning Incomplete implementation, return the number of rows
-    if (DEBUG) { NSLog(@"init %d items", _parkings.count); };
+//    if (DEBUG) { NSLog(@"init %d items", _parkings.count); };
     return [_parkings count];
 }
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView registerClass:[BMPTableViewCell class] forCellReuseIdentifier:cellReuseIdentifier];
